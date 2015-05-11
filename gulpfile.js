@@ -40,4 +40,5 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('default', ['install', 'chug-children', 'babel', 'browserify', 'watch']);
+// gulp.task('default', ['install', 'chug-children', 'babel', 'browserify', 'watch']);
+gulp.task('default', ['babel', 'browserify', 'watch']);

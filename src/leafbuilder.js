@@ -1,5 +1,5 @@
-const Formsmith = require('../submodules/formsmith/dist/main.js');
-const Leaf = require('../submodules/leaf/dist/main.js');
+const Formsmith = require('../submodules/formsmith/src/formsmith.js');
+const Leaf = require('../submodules/leaf/src/leaf.js');
 
 
 let x = 'hello';
