@@ -1,0 +1,27 @@
+{
+  "name": "leafbuilder",
+  "version": "0.0.1",
+  "description": "An authoring tool for creating living dynamic documents",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gravitypersists/leafbuilder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gravitypersists/leafbuilder/issues"
+  },
+  "homepage": "https://github.com/gravitypersists/leafbuilder#readme",
+  "devDependencies": {
+    "babelify": "^6.1.0",
+    "browserify": "^9.0.8",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0",
+    "gulp-watchify": "^0.5.0",
+    "watchify": "^3.2.1"
+  }
+}
