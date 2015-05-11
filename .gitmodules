@@ -1,0 +1,6 @@
+[submodule "submodules/leaf"]
+	path = submodules/leaf
+	url = git@github.com:gravitypersists/leaf.git
+[submodule "submodules/formsmith"]
+	path = submodules/formsmith
+	url = git@github.com:gravitypersists/formsmith.git
