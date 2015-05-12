@@ -10,13 +10,20 @@ class LayerTree {
 
   // nodeString looks like "3.0.1.3"
   addLayer(nodeString, $el) {
-    let layerNode = _.reduce(nodeString.split('.'), (res, n) => {
-      res[n] = res[n] || {};
-      return res[n];
-    }, this.data);
-    let le = new LayerEditor($el);
-    layerNode.$el = $el;
-    layerNode.editor = le;
+    let editor = new LayerEditor($el);
+
+    let parentNode = null;
+    let split = nodeString.split('.');
+    if (split.length == 1) {
+      parentNode = this.data[split[0]] = {};
+    } else {
+      parentNode = _.reduce(_.initial(split), (res, n) => res[n], this.data);
+      parentNode[_.last(split)] = { $el, editor }
+    }
+
+    editor.on('hovered', () => {
+      console.log('x');
+    });
   }
 
 }

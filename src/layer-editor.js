@@ -18,17 +18,20 @@ class LayerEditor extends mixin(class Base{}, events) {
         }
       </style>
     `);
-    $parent.hover(this.onHoverIn, this.onHoverOut);
+    $parent.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
   }
 
   onHoverIn(e) {
     e.stopPropagation();
-    $(this).addClass('hovered');
-    // communicate up to parent that this was chosen
+    if (e.shiftKey) {
+      $(e.currentTarget).addClass('hovered');
+      // communicate up to parent that this was chosen
+      this.emit('hovered');
+    }
   }
 
   onHoverOut(e) {
-    $(this).removeClass('hovered');
+    $(e.currentTarget).removeClass('hovered');
   }  
 
 }

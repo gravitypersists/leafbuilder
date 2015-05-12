@@ -12,5 +12,5 @@ let tree = new LayerTree(leaf);
 _.each($('html /deep/ .leaf-layer'), (el, i) => {
   var node = el.getAttribute('data-leaf-node');
   let $el = $(el);
-  tree.addLayer(node.split(':')[1], $el);
+  tree.addLayer(node.split(':')[0], $el);
 });
