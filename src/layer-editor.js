@@ -1,6 +1,6 @@
 const $ = require('jquery');
-const mixin = require('./mixin');
-const events = require('./events');
+const mixin = require('./util/mixin');
+const events = require('./util/events');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
