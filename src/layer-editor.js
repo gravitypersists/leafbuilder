@@ -22,18 +22,23 @@ class LayerEditor extends mixin(class Base{}, events) {
   }
 
   onHoverIn(e) {
-    $(e.currentTarget).addClass('hovered');
-    // communicate up to parent that this was chosen
-    this.emit('hovered');
+    this.emit('hoverIn');
   }
 
   onHoverOut(e) {
-    $(e.currentTarget).removeClass('hovered');
+    this.emit('hoverOut');
   }
 
   setDepth(i) {
     this.$el.addClass('deep');
-    console.log(i);
+  }
+
+  resetClasses() {
+    this.$el.removeClass('deep hovered');
+  }
+
+  setHovered() {
+    this.$el.addClass('hovered');
   }
 
 }

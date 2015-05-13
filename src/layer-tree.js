@@ -29,26 +29,43 @@ class LayerTree {
       parentNode.children[_.last(split)] = node;
     }
 
-    editor.on('hovered', (e) => this.handleChildHoveredOver(node));
+    editor.on('hoverIn', (e) => this.handleChildHoveredIn(node));
+    editor.on('hoverOut', (e) => this.handleChildHoveredOut(node));
   }
 
   toggleShift(bool) {
     this.shiftOn = (bool !== undefined) ? bool : !this.shiftOn;
-    $(document.body).css('background-color', (this.shiftOn) ? '#ccc' : '#fff');
-    if (this.currentHover) this.handleChildHoveredOver(this.currentHover);
+    $(document.body).css('border', '1px solid ' + ((this.shiftOn) ? '#ccc' : '#fff'));
+    if (this.currentHover) this.handleChildHoveredIn(this.currentHover);
+    if (!this.shiftOn) this.clearEditorClasses();
   }
 
-  handleChildHoveredOver(node) {
+  handleChildHoveredIn(node) {
     this.currentHover = node;
     if (this.shiftOn) {
+      this.clearEditorClasses();
       this.traverseChildren(node.children, 0);
+      if (node.editor) node.editor.setHovered();
     }
+  }
+
+  handleChildHoveredOut(node) {
+    this.clearEditorClasses();
+    this.handleChildHoveredIn(node.parentNode);
   }
 
   traverseChildren(children, depth) {
     _.each(children, (child) => {
       child.editor.setDepth(depth);
       this.traverseChildren(child.children, ++depth);
+    });
+  }
+
+  clearEditorClasses(node) {
+    node = node || this.data;
+    _.each(node.children, (child) => {
+      child.editor.resetClasses();
+      this.clearEditorClasses(child);
     });
   }
 
