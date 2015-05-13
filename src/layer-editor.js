@@ -6,9 +6,10 @@ class LayerEditor extends mixin(class Base{}, events) {
 
   constructor($el) {
     super();
+    this.$el = $el;
     $el.wrap('<div class="leafbuilder-container"></div>');
-    let $parent = $el.parent();
-    $parent.append(`
+    this.$el = $el.parent();
+    this.$el.append(`
       <style>
         .leafbuilder-container {
           display: inline-block;
@@ -37,24 +38,26 @@ class LayerEditor extends mixin(class Base{}, events) {
         <li class='config'></li>
       </ul>
     `);
-    $parent.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
-    $parent.find('.config').on('click', (e) => {
+    this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
+    this.$el.find('.config').on('click', (e) => {
       console.log('click');
     });
   }
 
   onHoverIn(e) {
-    e.stopPropagation();
-    if (e.shiftKey) {
-      $(e.currentTarget).addClass('hovered');
-      // communicate up to parent that this was chosen
-      this.emit('hovered');
-    }
+    $(e.currentTarget).addClass('hovered');
+    // communicate up to parent that this was chosen
+    this.emit('hovered');
   }
 
   onHoverOut(e) {
     $(e.currentTarget).removeClass('hovered');
-  }  
+  }
+
+  setDepth(i) {
+    this.$el.addClass('deep');
+    console.log(i);
+  }
 
 }
 
