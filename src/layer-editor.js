@@ -14,7 +14,7 @@ class LayerEditor extends mixin(class Base{}, events) {
       </ul>
     `);
     this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
-    this.$el.on('click', (e) => this.emit('click'));
+    this.$el.on('click', (e) => this.emit('click', e));
   }
 
   onHoverIn(e) {

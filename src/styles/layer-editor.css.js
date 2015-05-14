@@ -48,6 +48,10 @@ module.exports = `
   display: block;
 }
 
+.ghost {
+  display: inline-block;
+}
+
 .layer-menu {
   display: none;
   position: absolute;

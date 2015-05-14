@@ -9,11 +9,26 @@
       margin: 0 auto;
       font-family: sans-serif;
     }
+    #leafbuilder.editing-layer #leaf:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+    }
+    .detached {
+      background-color: white;
+    }
   </style>
 </head>
 <body>
   <div id="leafbuilder">
-    <div id="top-node"></div>
+    <div id="leaf">
+      <div id="top-node"></div>
+    <div>
   </div>
 
   <script type="text/javascript" src="build/leafbuilder.js"></script>
