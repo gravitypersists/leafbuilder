@@ -7,8 +7,6 @@ class LayerEditor extends mixin(class Base{}, events) {
   constructor($el) {
     super();
     this.$el = $el;
-    $el.wrap('<div class="leafbuilder-container"></div>');
-    this.$el = $el.parent();
     this.$el.append(`
       <style> ${ require('./styles/layer-editor.css.js') } </style>
       <ul class='layer-menu'>
@@ -16,9 +14,7 @@ class LayerEditor extends mixin(class Base{}, events) {
       </ul>
     `);
     this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
-    this.$el.find('.config').on('click', (e) => {
-      console.log('click');
-    });
+    this.$el.on('click', (e) => this.emit('click'));
   }
 
   onHoverIn(e) {

@@ -5,14 +5,19 @@ const LayerEditor = require('./layer-editor.js');
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
 
-  constructor() {
+  constructor(leaf, $el) {
+    this.$el = $el;
     // worth noting that this.data structure is self-referential, so cannot be stringified 
     this.data = null;
     this.shiftOn = false;
+    // This might not work as webcomponents evolves
+    this.detachments = [];
   }
 
   // nodeString looks like "3.0.1.3"
-  addLayer(nodeString, $el) {
+  addLayer(nodeString, $childEl) {
+    $childEl.wrap('<div class="leafbuilder-container"></div>');
+    let $el = $childEl.parent();
     let editor = new LayerEditor($el);
 
     let node = null;
@@ -31,6 +36,7 @@ class LayerTree {
 
     editor.on('hoverIn', (e) => this.handleChildHoveredIn(node));
     editor.on('hoverOut', (e) => this.handleChildHoveredOut(node));
+    editor.on('click', (e) => this.handleEditorClick(node));
   }
 
   toggleShift(bool) {
@@ -66,6 +72,41 @@ class LayerTree {
     _.each(node.children, (child) => {
       child.editor.resetClasses();
       this.clearEditorClasses(child);
+    });
+  }
+
+  handleEditorClick(node) {
+    if (this.currentHover !== node && this.shiftOn) return;
+    this.setNodeToEdit(node);
+  }
+
+  setNodeToEdit(node) {
+    this.returnDetachments();
+    let $old = node.$el.children();
+    let $ghost = $(`<div 
+      style="width:${ $old.width() }px; height:${ $old.height() }px;">`);
+    node.$el.html($ghost);
+    $old.detach();
+    let $detached = $('<div class="detached"></div>');
+    $detached.append($old);
+    this.$el.append($detached);
+    // note that $.offset() does not work with shadow dom'd elements
+    $detached.css({
+      position: 'absolute',
+      top: $ghost[0].getBoundingClientRect().top - this.$el.offset().top,
+      left: $ghost[0].getBoundingClientRect().left - this.$el.offset().left
+    });
+    this.detachments.push({
+      $origin: node.$el,
+      $el: $detached
+    });
+  }
+
+  returnDetachments() {
+    _.each(this.detachments, (detachment, i) => {
+      detachment.$origin.html(detachment.$el.children());
+      this.detachments.splice(i, 1);
+      detachment.$el.remove();
     });
   }
 

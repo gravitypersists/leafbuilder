@@ -15,7 +15,7 @@ configuration.manifests = {
 
 let options = { el: $('#top-node')[0] };
 let leaf = new Leaf(configuration, options);
-let tree = new LayerTree(leaf);
+let tree = new LayerTree(leaf, $('#leafbuilder'));
 
 $(document.body).on('keydown', (e) => {
   if (e.keyCode === 16) { 
