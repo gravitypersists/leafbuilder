@@ -77,7 +77,7 @@ class LayerTree {
   }
 
   handleEditorClick(node, e) {
-    if (this.currentHover !== node && this.shiftOn) return;
+    if (this.currentHover !== node || !this.shiftOn) return;
     e.stopPropagation();
     this.setNodeToEdit(node);
   }
