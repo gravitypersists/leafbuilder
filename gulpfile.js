@@ -36,7 +36,7 @@ gulp.task('install', function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['babel', 'browserify']);
+  gulp.watch(['src/**/*.js', 'submodules/leaf/src/**'], ['babel', 'browserify']);
 });
 
 
