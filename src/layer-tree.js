@@ -47,6 +47,14 @@ class LayerTree {
     if (!this.shiftOn) this.clearEditorClasses();
   }
 
+  escape() {
+    this.shiftOn = false;
+    this.editingNode = true;
+    this.returnDetachments();
+    this.clearEditorClasses();
+    this.$el.removeClass('editing-layer');
+  }
+
   handleChildHoveredIn(node) {
     this.currentHover = node;
     if (this.shiftOn) {

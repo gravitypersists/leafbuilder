@@ -18,8 +18,11 @@ let leaf = new Leaf(configuration, options);
 let tree = new LayerTree(leaf, $('#leafbuilder'));
 
 $(document.body).on('keydown', (e) => {
-  if (e.keyCode === 16) { 
+  if (e.keyCode === 16) { // shift
     tree.toggleShift();
+  }
+  if (e.keyCode === 27) { // esc
+    tree.escape();
   }
 });
 
