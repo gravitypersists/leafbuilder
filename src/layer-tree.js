@@ -25,13 +25,13 @@ class LayerTree {
     let split = nodeString.split('.');
     if (split.length == 1) {
       // manually construct top level data structure
-      this.data = { children: [] };
-      node = { $el, editor, parentNode:this.data, children: [] };
+      this.data = { children: {} };
+      node = { $el, editor, parentNode:this.data, children: {} };
       this.data.children[nodeString] = node;
     } else {
       // traverse the tree to get the parent node, then add it to the structure
       let parentNode = _.reduce(_.initial(split), (res, n) => res.children[n], this.data);
-      node = { $el, editor, parentNode, children: [] };
+      node = { $el, editor, parentNode, children: {} };
       parentNode.children[_.last(split)] = node;
     }
 
