@@ -13,6 +13,16 @@ class ElementEditor extends mixin(class Base{}, events) {
         <li class='config'></li>
       </ul>
     `);
+
+    this.$el.on('click', (e) => this.handleClick());
+  }
+
+  showEditOptions() {
+    this.addClass('editing');
+  }
+
+  handleClick() {
+    this.emit('click');
   }
 
 }

@@ -4,7 +4,12 @@ module.exports = `
   Read the comment in layer-editor.css.js
 */
 
+.leaf-element.editing .element-menu {
+  display: block;
+}
 
-
+.element-menu {
+  display: none;
+}
 
 `

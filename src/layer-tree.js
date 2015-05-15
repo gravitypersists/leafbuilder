@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const $ = require('jquery');
-const LayerEditor = require('./layer-editor.js');
+const LayerHover = require('./layer-hover.js');
 
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
@@ -19,25 +19,25 @@ class LayerTree {
   addLayer(nodeString, $childEl) {
     $childEl.wrap('<div class="leafbuilder-container" style="display: inline-block"></div>');
     let $el = $childEl.parent();
-    let editor = new LayerEditor($el);
+    let hover = new LayerHover($el);
 
     let node = null;
     let split = nodeString.split('.');
     if (split.length == 1) {
       // manually construct top level data structure
       this.data = { children: {} };
-      node = { $el, editor, parentNode:this.data, children: {} };
+      node = { $el, hover, parentNode:this.data, children: {} };
       this.data.children[nodeString] = node;
     } else {
       // traverse the tree to get the parent node, then add it to the structure
       let parentNode = _.reduce(_.initial(split), (res, n) => res.children[n], this.data);
-      node = { $el, editor, parentNode, children: {} };
+      node = { $el, hover, parentNode, children: {} };
       parentNode.children[_.last(split)] = node;
     }
 
-    editor.on('hoverIn', (e) => this.handleChildHoveredIn(node));
-    editor.on('hoverOut', (e) => this.handleChildHoveredOut(node));
-    editor.on('click', (e) => this.handleEditorClick(node, e));
+    hover.on('hoverIn', (e) => this.handleChildHoveredIn(node));
+    hover.on('hoverOut', (e) => this.handleChildHoveredOut(node));
+    hover.on('click', (e) => this.handleHoverClick(node, e));
   }
 
   toggleShift(bool) {
@@ -47,47 +47,47 @@ class LayerTree {
       this.shiftOn = true;
     }
     if (this.currentHover) this.handleChildHoveredIn(this.currentHover);
-    if (!this.shiftOn) this.clearEditorClasses();
+    if (!this.shiftOn) this.clearHoverClasses();
   }
 
   escape() {
     this.shiftOn = false;
     this.editingNode = false;
     this.returnDetachments();
-    this.clearEditorClasses();
+    this.clearHoverClasses();
     this.$el.removeClass('editing-layer');
   }
 
   handleChildHoveredIn(node) {
     this.currentHover = node;
     if (this.shiftOn) {
-      this.clearEditorClasses();
+      this.clearHoverClasses();
       this.traverseChildren(node.children, 0);
-      if (node.editor) node.editor.setHovered();
+      if (node.hover) node.hover.setHovered();
     }
   }
 
   handleChildHoveredOut(node) {
-    this.clearEditorClasses();
+    this.clearHoverClasses();
     this.handleChildHoveredIn(node.parentNode);
   }
 
   traverseChildren(children, depth) {
     _.each(children, (child) => {
-      child.editor.setDepth(depth);
+      child.hover.setDepth(depth);
       this.traverseChildren(child.children, ++depth);
     });
   }
 
-  clearEditorClasses(node) {
+  clearHoverClasses(node) {
     node = node || this.data;
     _.each(node.children, (child) => {
-      child.editor.resetClasses();
-      this.clearEditorClasses(child);
+      child.hover.resetClasses();
+      this.clearHoverClasses(child);
     });
   }
 
-  handleEditorClick(node, e) {
+  handleHoverClick(node, e) {
     if (this.currentHover !== node || !this.shiftOn) return;
     e.stopPropagation();
     this.setNodeToEdit(node);
@@ -133,6 +133,8 @@ class LayerTree {
       $el: $detached
     });
 
+    // and then finally...
+    // node.editor.enable();
   }
 
   returnDetachments() {

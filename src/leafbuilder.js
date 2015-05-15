@@ -10,7 +10,8 @@ configuration.manifests = {
   Katex: require('../submodules/leaf/src/elements/katex/manifest.json'),
   Picker: require('../submodules/leaf/src/elements/picker/manifest.json'),
   Image: require('../submodules/leaf/src/elements/image/manifest.json'),
-  Switch: require('../submodules/leaf/src/elements/switch/manifest.json')
+  Switch: require('../submodules/leaf/src/elements/switch/manifest.json'),
+  Switch: require('../submodules/leaf/src/elements/event-button/manifest.json')
 }
 
 let options = { el: $('#top-node')[0] };

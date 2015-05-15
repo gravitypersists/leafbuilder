@@ -15,33 +15,21 @@ class LayerEditor extends mixin(class Base{}, events) {
         <li class='config'></li>
       </ul>
     `);
-    this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
-    this.$el.on('click', (e) => this.emit('click', e));
 
     _.each(this.$el.find('.leaf-element'), (el, i) => {
-      new ElementEditor($(el));
+      let elEditor = new ElementEditor($(el));
+      elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });
 
   }
 
-  onHoverIn(e) {
-    this.emit('hoverIn');
+  enable() {
+    this.enabled = true;
   }
 
-  onHoverOut(e) {
-    this.emit('hoverOut');
-  }
-
-  setDepth(i) {
-    this.$el.addClass('deep');
-  }
-
-  resetClasses() {
-    this.$el.removeClass('deep hovered');
-  }
-
-  setHovered() {
-    this.$el.addClass('hovered');
+  handleElementEditorClick(editor) {
+    if (!this.enabled) return;
+    editor.showEditOptions();
   }
 
 }
