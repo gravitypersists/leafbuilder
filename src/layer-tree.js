@@ -6,8 +6,9 @@ const LayerEditor = require('./layer-editor.js');
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
 
-  constructor(leaf, $el) {
+  constructor(leaf, $el, toolbox) {
     this.$el = $el;
+    this.toolbox = toolbox;
     // worth noting that this.data structure is self-referential, so cannot be stringified 
     this.data = null;
     this.shiftOn = false;
@@ -127,7 +128,7 @@ class LayerTree {
     });
 
     // and then finally create the editor
-    let le = new LayerEditor($detached);
+    let le = new LayerEditor($detached, this.toolbox);
 
     // finally retain them for convenience later on when leaving edit mode
     this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost, le })

@@ -4,8 +4,10 @@ const events = require('./util/events');
 
 class ElementEditor extends mixin(class Base{}, events) {
 
-  constructor($original) {
+  constructor($original, toolbox) {
     super();
+    this.toolbox = toolbox;
+
     this.$original = $original;
     $original.wrap('<div class="leafbuilder-el-container" style="display: inline-block"></div>');
     this.$el = $original.parent();
@@ -18,6 +20,7 @@ class ElementEditor extends mixin(class Base{}, events) {
 
   showEditOptions() {
     this.$el.addClass('editing');
+    this.toolbox.show(this.$el[0].getBoundingClientRect());
   }
 
   clearEditOptions() {

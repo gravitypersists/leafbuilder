@@ -6,7 +6,7 @@ const ElementEditor = require('./element-editor');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
-  constructor($el) {
+  constructor($el, toolbox) {
     super();
     this.$el = $el;
     this.$el.append(`
@@ -18,7 +18,7 @@ class LayerEditor extends mixin(class Base{}, events) {
 
     this.editors = [];
     _.each(this.$el.find('.leaf-element'), (el, i) => {
-      let elEditor = new ElementEditor($(el));
+      let elEditor = new ElementEditor($(el), toolbox);
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });

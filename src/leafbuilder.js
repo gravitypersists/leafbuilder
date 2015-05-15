@@ -2,6 +2,7 @@ const $ = require('jquery');
 const _ = require('lodash');
 const Leaf = require('../submodules/leaf/src/leaf');
 const LayerTree = require('./layer-tree');
+const Toolbox = require('./toolbox');
 
 // these things will be packaged up appropriately in the future
 let configuration = require('../submodules/leaf/examples/basic.json');
@@ -18,11 +19,13 @@ let $lb = $('#leafbuilder').html(`
   <div id="leaf">
     <div id="top-node"></div>
   </div>
+  <div class="toolbox"></div>
 `);
 
 let options = { el: $('#top-node')[0] };
 let leaf = new Leaf(configuration, options);
-let tree = new LayerTree(leaf, $lb);
+let toolbox = new Toolbox($lb.children('.toolbox'));
+let tree = new LayerTree(leaf, $lb, toolbox);
 
 
 $(document.body).on('keydown', (e) => {
