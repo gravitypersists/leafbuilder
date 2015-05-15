@@ -24,7 +24,7 @@ let $lb = $('#leafbuilder').html(`
 
 let options = { el: $('#top-node')[0] };
 let leaf = new Leaf(configuration, options);
-let toolbox = new Toolbox($lb.children('.toolbox'), leaf);
+let toolbox = new Toolbox($lb.children('.toolbox'), leaf, configuration.manifests);
 let tree = new LayerTree(leaf, $lb, toolbox);
 
 

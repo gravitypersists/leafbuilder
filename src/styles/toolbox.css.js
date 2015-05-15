@@ -7,10 +7,10 @@ module.exports = `
 .toolbox {
   position: absolute;
   z-index: 100;
+  width: 500px;
 }
 
 .toolbox-options {
-  background-color: red;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -24,6 +24,13 @@ module.exports = `
 
 .toolbox-drawer {
   display: none;
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  background-color: #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  border-top-left-radius: 0;
 }
 
 `

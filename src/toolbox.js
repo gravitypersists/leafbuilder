@@ -2,13 +2,15 @@ const $ = require('jquery');
 const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
+const FormSmith = require('../submodules/formsmith/src/formsmith');
 
 class Toolbox extends mixin(class Base{}, events) {
 
-  constructor($el, leaf) {
+  constructor($el, leaf, manifests) {
     super();
     this.$el = $el;
     this.leaf = leaf;
+    this.manifests = manifests;
     $el.html(`
       <style> ${ require('./styles/toolbox.css.js') } </style>
       <ul class='toolbox-options'>
@@ -16,7 +18,7 @@ class Toolbox extends mixin(class Base{}, events) {
       </ul>
       <div class='toolbox-drawer'></div>
     `);
-    $el.find('.config').on('click', this.handleConfig.bind(this));
+    // $el.find('.config').on('click', this.handleConfig.bind(this));
     this.$drawer = $el.find('.toolbox-drawer');
   }
 
@@ -29,7 +31,11 @@ class Toolbox extends mixin(class Base{}, events) {
 
     if (id) {
       this.$el.find('.config').show().on('click', (e) => {
-        this.$drawer.html('hello!').show();
+        let leafEl = this.leaf.getElementById(id);
+        let schema = this.manifests[leafEl.elementData.type].configSchema;
+        let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0]);
+        this.$drawer.show();
+        fs.onChange((config) => leafEl.rebuild(config));
       });
     } else {
       this.$el.find('.config').hide();
