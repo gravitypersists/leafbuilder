@@ -103,22 +103,20 @@ class LayerTree {
     this.$el.addClass('editing-layer');
     this.returnDetachments();
 
-    let $old = node.$el.children();
+    let $goods = node.$el.children('.leaf-layer');
 
     // A ghost to retain flow in the dom with removed structure
     let $ghost = $(`<div class="ghost"
       style="
-        width: ${ $old.width() }px;
-        height: ${ $old.height() }px;
+        width: ${ $goods.width() }px;
+        height: ${ $goods.height() }px;
       ">`);
     node.$el.html($ghost);
-    // also retain styles - since shadow dom is wrecking them
-    node.$el.append($old.find('style').clone());
 
     // now detach and append to top leafbuilder div
-    $old.detach(); // $.detach will prob not work in future shadow dom
+    $goods.detach(); // $.detach will prob not work in future shadow dom
     let $detached = $('<div class="detached"></div>');
-    $detached.append($old);
+    $detached.append($goods);
     this.$el.append($detached);
     // note that $.offset() does not work with shadow dom'd elements
     $detached.css({
@@ -128,10 +126,7 @@ class LayerTree {
     });
 
     // finally retain them for convenience later on when leaving edit mode
-    this.detachments.push({
-      $origin: node.$el,
-      $el: $detached
-    });
+    this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost })
 
     // and then finally...
     // node.editor.enable();
@@ -139,9 +134,10 @@ class LayerTree {
 
   returnDetachments() {
     _.each(this.detachments, (detachment, i) => {
-      detachment.$origin.html(detachment.$el.children());
+      detachment.$origin.append(detachment.$goods);
       this.detachments.splice(i, 1);
-      detachment.$el.remove();
+      detachment.$detached.remove();
+      detachment.$ghost.remove();
     });
   }
 
