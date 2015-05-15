@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const $ = require('jquery');
 const LayerHover = require('./layer-hover.js');
+const LayerEditor = require('./layer-editor.js');
 
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
@@ -125,11 +126,11 @@ class LayerTree {
       left: $ghost[0].getBoundingClientRect().left - this.$el.offset().left
     });
 
-    // finally retain them for convenience later on when leaving edit mode
-    this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost })
+    // and then finally create the editor
+    let le = new LayerEditor($detached);
 
-    // and then finally...
-    // node.editor.enable();
+    // finally retain them for convenience later on when leaving edit mode
+    this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost, le })
   }
 
   returnDetachments() {
@@ -138,6 +139,7 @@ class LayerTree {
       this.detachments.splice(i, 1);
       detachment.$detached.remove();
       detachment.$ghost.remove();
+      detachment.le.deconstruct();
     });
   }
 

@@ -16,8 +16,10 @@ class LayerEditor extends mixin(class Base{}, events) {
       </ul>
     `);
 
+    this.editors = [];
     _.each(this.$el.find('.leaf-element'), (el, i) => {
       let elEditor = new ElementEditor($(el));
+      this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });
 
@@ -30,6 +32,10 @@ class LayerEditor extends mixin(class Base{}, events) {
   handleElementEditorClick(editor) {
     if (!this.enabled) return;
     editor.showEditOptions();
+  }
+
+  deconstruct() {
+    _.each(this.editors, (e) => e.deconstruct());
   }
 
 }

@@ -4,9 +4,11 @@ const events = require('./util/events');
 
 class ElementEditor extends mixin(class Base{}, events) {
 
-  constructor($el) {
+  constructor($original) {
     super();
-    this.$el = $el;
+    this.$original = $original;
+    $original.wrap('<div class="leafbuilder-el-container" style="display: inline-block"></div>');
+    this.$el = $original.parent();
     this.$el.append(`
       <style> ${ require('./styles/element-editor.css.js') } </style>
       <ul class='element-menu'>
@@ -23,6 +25,10 @@ class ElementEditor extends mixin(class Base{}, events) {
 
   handleClick() {
     this.emit('click');
+  }
+
+  deconstruct() {
+    this.$el.html(this.$original).children('.leaf-element').unwrap();
   }
 
 }
