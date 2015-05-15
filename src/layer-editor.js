@@ -1,6 +1,8 @@
 const $ = require('jquery');
+const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
+const ElementEditor = require('./element-editor');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
@@ -15,6 +17,11 @@ class LayerEditor extends mixin(class Base{}, events) {
     `);
     this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
     this.$el.on('click', (e) => this.emit('click', e));
+
+    _.each(this.$el.find('.leaf-element'), (el, i) => {
+      new ElementEditor($(el));
+    });
+
   }
 
   onHoverIn(e) {
