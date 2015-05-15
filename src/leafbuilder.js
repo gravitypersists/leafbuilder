@@ -14,9 +14,16 @@ configuration.manifests = {
   Switch: require('../submodules/leaf/src/elements/event-button/manifest.json')
 }
 
+let $lb = $('#leafbuilder').html(`
+  <div id="leaf">
+    <div id="top-node"></div>
+  </div>
+`);
+
 let options = { el: $('#top-node')[0] };
 let leaf = new Leaf(configuration, options);
-let tree = new LayerTree(leaf, $('#leafbuilder'));
+let tree = new LayerTree(leaf, $lb);
+
 
 $(document.body).on('keydown', (e) => {
   if (e.keyCode === 16) { // shift
