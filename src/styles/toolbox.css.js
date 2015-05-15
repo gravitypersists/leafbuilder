@@ -6,8 +6,24 @@ module.exports = `
 
 .toolbox {
   position: absolute;
+  z-index: 100;
+}
+
+.toolbox-options {
   background-color: red;
-  z-index: 100
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toolbox-options li {
+  width: 30px;
+  height: 30px;
+  background-color: gray;
+}
+
+.toolbox-drawer {
+  display: none;
 }
 
 `

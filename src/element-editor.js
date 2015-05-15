@@ -20,7 +20,9 @@ class ElementEditor extends mixin(class Base{}, events) {
 
   showEditOptions() {
     this.$el.addClass('editing');
-    this.toolbox.show(this.$el[0].getBoundingClientRect());
+    let elId = this.$el.children('.leaf-element').attr('data-leaf-el');
+    let layerId = this.$el.parent().attr('data-leaf-node');
+    this.toolbox.show(this.$el[0].getBoundingClientRect(), layerId+':'+elId);
   }
 
   clearEditOptions() {
