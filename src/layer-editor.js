@@ -25,12 +25,8 @@ class LayerEditor extends mixin(class Base{}, events) {
 
   }
 
-  enable() {
-    this.enabled = true;
-  }
-
   handleElementEditorClick(editor) {
-    if (!this.enabled) return;
+    _.each(this.editors, (e) => e.clearEditOptions());
     editor.showEditOptions();
   }
 

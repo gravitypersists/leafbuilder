@@ -11,16 +11,17 @@ class ElementEditor extends mixin(class Base{}, events) {
     this.$el = $original.parent();
     this.$el.append(`
       <style> ${ require('./styles/element-editor.css.js') } </style>
-      <ul class='element-menu'>
-        <li class='config'></li>
-      </ul>
     `);
 
     this.$el.on('click', (e) => this.handleClick());
   }
 
   showEditOptions() {
-    this.addClass('editing');
+    this.$el.addClass('editing');
+  }
+
+  clearEditOptions() {
+    this.$el.removeClass('editing');
   }
 
   handleClick() {
