@@ -42,14 +42,17 @@ class LayerTree {
 
   toggleShift(bool) {
     this.shiftOn = (bool !== undefined) ? bool : !this.shiftOn;
-    $(document.body).css('border', '1px solid ' + ((this.shiftOn) ? '#ccc' : '#fff'));
+    if (this.shiftOn) {
+      this.escape();
+      this.shiftOn = true;
+    }
     if (this.currentHover) this.handleChildHoveredIn(this.currentHover);
     if (!this.shiftOn) this.clearEditorClasses();
   }
 
   escape() {
     this.shiftOn = false;
-    this.editingNode = true;
+    this.editingNode = false;
     this.returnDetachments();
     this.clearEditorClasses();
     this.$el.removeClass('editing-layer');
@@ -95,6 +98,7 @@ class LayerTree {
   // in order to blur those out, I need to detach the layer from
   // it's place in the dom and replace it on the top level.
   setNodeToEdit(node) {
+    this.toggleShift(false);
     this.editingNode = true;
     this.$el.addClass('editing-layer');
     this.returnDetachments();
