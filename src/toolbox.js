@@ -20,6 +20,7 @@ class Toolbox extends mixin(class Base{}, events) {
     `);
     // $el.find('.config').on('click', this.handleConfig.bind(this));
     this.$drawer = $el.find('.toolbox-drawer');
+    this.$el.hide();
   }
 
   // caution here, as toolbox is becoming knowledgeable about parent
@@ -28,6 +29,7 @@ class Toolbox extends mixin(class Base{}, events) {
       top: rect.top - this.$el.parent().offset().top,
       left: rect.right - this.$el.parent().offset().left + 5
     });
+    this.$el.show();
 
     if (id) {
       this.$el.find('.config').show().on('click', (e) => {
@@ -41,6 +43,10 @@ class Toolbox extends mixin(class Base{}, events) {
       this.$el.find('.config').hide();
     }
 
+  }
+
+  close() {
+    this.$el.hide();
   }
 
   handleConfig() {

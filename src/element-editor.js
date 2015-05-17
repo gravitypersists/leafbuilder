@@ -16,6 +16,7 @@ class ElementEditor extends mixin(class Base{}, events) {
     `);
 
     this.$el.on('click', (e) => this.handleClick());
+    this.boundHandler = this.handleBodyClick.bind(this);
   }
 
   showEditOptions() {
@@ -23,10 +24,22 @@ class ElementEditor extends mixin(class Base{}, events) {
     let elId = this.$el.children('.leaf-element').attr('data-leaf-el');
     let layerId = this.$el.parent().attr('data-leaf-node');
     this.toolbox.show(this.$el[0].getBoundingClientRect(), layerId+':'+elId);
+    // use mousedown here instead of click to avoid click invoking 
+    // showEditOptions from automatically invoking the handler
+    $(document.body).on('mousedown', this.boundHandler);
   }
 
   clearEditOptions() {
     this.$el.removeClass('editing');
+    this.toolbox.close();
+    $(document.body).off('mousedown', this.boundHandler);
+  }
+
+  handleBodyClick(e) {
+    // click happened not within .toolbox
+    if ($(e.target).closest('.toolbox').length === 0) {
+      this.clearEditOptions();
+    }
   }
 
   handleClick() {
@@ -34,6 +47,7 @@ class ElementEditor extends mixin(class Base{}, events) {
   }
 
   deconstruct() {
+    this.clearEditOptions();
     this.$el.html(this.$original).children('.leaf-element').unwrap();
   }
 
