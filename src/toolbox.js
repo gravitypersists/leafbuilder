@@ -21,6 +21,7 @@ class Toolbox extends mixin(class Base{}, events) {
     // $el.find('.config').on('click', this.handleConfig.bind(this));
     this.$drawer = $el.find('.toolbox-drawer');
     this.$el.hide();
+    this.$el.find('.config').on('click', this.handleConfig.bind(this));
   }
 
   // caution here, as toolbox is becoming knowledgeable about parent
@@ -30,31 +31,26 @@ class Toolbox extends mixin(class Base{}, events) {
       left: rect.right - this.$el.parent().offset().left + 5
     });
     this.$el.show();
+    this.$drawer.empty().hide();
 
-    if (id) {
-      this.$el.find('.config').show().on('click', (e) => {
-        let leafEl = this.leaf.getElementById(id);
-        let schema = this.manifests[leafEl.elementData.type].configSchema;
-        let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0]);
-        this.$drawer.show();
-        fs.onChange((config) => leafEl.rebuild(config));
-      });
-    } else {
-      this.$el.find('.config').hide();
-    }
+    (id) ? this.id = id : this.$el.find('.config').hide();
 
+    // for now, for convenience 
+    this.$el.find('.config').click();
   }
 
   close() {
     this.$el.hide();
   }
 
-  handleConfig() {
-    console.log('config-clicked');
+  handleConfig(e) {
+    let leafEl = this.leaf.getElementById(this.id);
+    let schema = this.manifests[leafEl.elementData.type].configSchema;
+    let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0]);
+    this.$drawer.show();
+    fs.onChange((config) => leafEl.rebuild(config));
   }
-
 
 }
 
-// singleton, for now.
 module.exports = Toolbox;
