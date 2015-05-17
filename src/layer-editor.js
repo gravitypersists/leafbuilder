@@ -3,6 +3,7 @@ const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
 const ElementEditor = require('./element-editor');
+const MediumEditor = require('../node_modules/medium-editor/dist/js/medium-editor.js');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
@@ -22,7 +23,9 @@ class LayerEditor extends mixin(class Base{}, events) {
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });
-
+    new MediumEditor(this.$el[0], {
+      buttons: ['bold', 'italic', 'quote']
+    });
   }
 
   handleElementEditorClick(editor) {
