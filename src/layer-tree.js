@@ -113,7 +113,7 @@ class LayerTree {
         width: ${ $goods.width() }px;
         height: ${ $goods.height() }px;
       ">`);
-    node.$el.html($ghost);
+    node.$el.append($ghost);
 
     // now detach and append to top leafbuilder div
     $goods.detach(); // $.detach will prob not work in future shadow dom
