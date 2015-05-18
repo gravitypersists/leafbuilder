@@ -23,12 +23,13 @@
     "gulp-babel": "^5.1.0",
     "gulp-chug": "^0.4.2",
     "gulp-install": "^0.4.0",
-    "gulp-watchify": "^0.5.0",
-    "watchify": "^3.2.1",
+    "gulp-util": "^3.0.4",
     "jquery": "^2.1.4",
     "lodash": "^3.8.0",
-    "medium-editor": "^4.8.1"
+    "medium-editor": "^4.8.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
