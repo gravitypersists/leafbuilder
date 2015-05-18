@@ -29,8 +29,8 @@ let tree = new LayerTree(leaf, $lb, toolbox);
 
 
 $(document.body).on('keydown', (e) => {
-  if (e.keyCode === 16) { // shift
-    tree.toggleShift();
+  if (e.keyCode === 192) { // ` character
+    tree.toggleEditMode();
   }
   if (e.keyCode === 27) { // esc
     tree.escape();

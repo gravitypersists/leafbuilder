@@ -11,7 +11,7 @@ class LayerTree {
     this.toolbox = toolbox;
     // worth noting that this.data structure is self-referential, so cannot be stringified 
     this.data = null;
-    this.shiftOn = false;
+    this.editMode = false;
     // This might not work as webcomponents evolves
     this.detachments = [];
     this.editingNode = false;
@@ -42,18 +42,18 @@ class LayerTree {
     hover.on('click', (e) => this.handleHoverClick(node, e));
   }
 
-  toggleShift(bool) {
-    this.shiftOn = (bool !== undefined) ? bool : !this.shiftOn;
-    if (this.shiftOn) {
+  toggleEditMode(bool) {
+    this.editMode = (bool !== undefined) ? bool : !this.editMode;
+    if (this.editMode) {
       this.escape();
-      this.shiftOn = true;
+      this.editMode = true;
     }
     if (this.currentHover) this.handleChildHoveredIn(this.currentHover);
-    if (!this.shiftOn) this.clearHoverClasses();
+    if (!this.editMode) this.clearHoverClasses();
   }
 
   escape() {
-    this.shiftOn = false;
+    this.editMode = false;
     this.editingNode = false;
     this.returnDetachments();
     this.clearHoverClasses();
@@ -62,7 +62,7 @@ class LayerTree {
 
   handleChildHoveredIn(node) {
     this.currentHover = node;
-    if (this.shiftOn) {
+    if (this.editMode) {
       this.clearHoverClasses();
       this.traverseChildren(node.children, 0);
       if (node.hover) node.hover.setHovered();
@@ -90,7 +90,7 @@ class LayerTree {
   }
 
   handleHoverClick(node, e) {
-    if (this.currentHover !== node || !this.shiftOn) return;
+    if (this.currentHover !== node || !this.editMode) return;
     e.stopPropagation();
     this.setNodeToEdit(node);
   }
@@ -100,7 +100,7 @@ class LayerTree {
   // in order to blur those out, I need to detach the layer from
   // it's place in the dom and replace it on the top level.
   setNodeToEdit(node) {
-    this.toggleShift(false);
+    this.toggleEditMode(false);
     this.editingNode = true;
     this.$el.addClass('editing-layer');
     this.returnDetachments();
