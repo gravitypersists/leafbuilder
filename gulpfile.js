@@ -30,11 +30,11 @@ function bundle() {
   return b;
 }
 
-gulp.task('babel', function () {
-  return gulp.src('src/**/*.js')
-    .pipe(babel())
-    .pipe(gulp.dest('build'));
-});
+// gulp.task('babel', function () {
+//   return gulp.src('src/**/*.js')
+//     .pipe(babel())
+//     .pipe(gulp.dest('build'));
+// });
 
 // gulp.task('chug-children', function () {
 //     // Find and run all gulpfiles under all subdirectories 
@@ -51,4 +51,4 @@ gulp.task('babel', function () {
 
 
 // gulp.task('default', ['install', 'chug-children', 'babel', 'browserify', 'watch']);
-\gulp.task('default', ['browserify']);
+gulp.task('default', ['browserify']);

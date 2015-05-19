@@ -3,6 +3,7 @@ const _ = require('lodash');
 const Leaf = require('../submodules/leaf/src/leaf');
 const LayerTree = require('./layer-tree');
 const Toolbox = require('./toolbox');
+const ConfigModel = require('./config');
 
 // these things will be packaged up appropriately in the future
 let configuration = require('../submodules/leaf/examples/basic.json');
@@ -14,6 +15,7 @@ configuration.manifests = {
   Switch: require('../submodules/leaf/src/elements/switch/manifest.json'),
   Switch: require('../submodules/leaf/src/elements/event-button/manifest.json')
 }
+let config = new ConfigModel(configuration);
 
 let $lb = $('#leafbuilder').html(`
   <div id="leaf">
@@ -25,7 +27,7 @@ let $lb = $('#leafbuilder').html(`
 let options = { el: $('#top-node')[0] };
 let leaf = new Leaf(configuration, options);
 let toolbox = new Toolbox($lb.children('.toolbox'), leaf, configuration.manifests);
-let tree = new LayerTree(leaf, $lb, toolbox);
+let tree = new LayerTree(leaf, $lb, config, toolbox);
 
 
 $(document.body).on('keydown', (e) => {

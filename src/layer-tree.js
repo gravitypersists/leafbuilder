@@ -6,10 +6,11 @@ const LayerEditor = require('./layer-editor.js');
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
 
-  constructor(leaf, $el, toolbox) {
+  constructor(leaf, $el, config, toolbox) {
     this.$el = $el;
     this.toolbox = toolbox;
-    // worth noting that this.data structure is self-referential, so cannot be stringified 
+    this.config = config;
+    // worth noting that this.data structure is self-referential, so cannot be serialized 
     this.data = null;
     this.editMode = false;
     // This might not work as webcomponents evolves
@@ -128,7 +129,7 @@ class LayerTree {
     });
 
     // and then finally create the editor
-    let le = new LayerEditor($detached, this.toolbox);
+    let le = new LayerEditor($detached, this.config, this.toolbox);
 
     // finally retain them for convenience later on when leaving edit mode
     this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost, le })

@@ -7,9 +7,10 @@ const MediumEditor = require('../node_modules/medium-editor/dist/js/medium-edito
 
 class LayerEditor extends mixin(class Base{}, events) {
 
-  constructor($el, toolbox) {
+  constructor($el, config, toolbox) {
     super();
     this.$el = $el;
+    this.config = config;
     this.$el.append(`
       <style> ${ require('./styles/layer-editor.css.js') } </style>
       <ul class='layer-menu'>
@@ -23,14 +24,57 @@ class LayerEditor extends mixin(class Base{}, events) {
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });
-    new MediumEditor(this.$el[0], {
-      buttons: ['bold', 'italic', 'quote']
+    let me = new MediumEditor(this.$el.find('.leaf-layer')[0], {
+      buttons: ['bold', 'italic', 'quote'],
+      paste: {
+          forcePlainText: false
+      }
     });
+    me.subscribe('editableInput', this.handleLayerEdits.bind(this));
   }
 
   handleElementEditorClick(editor) {
     _.each(this.editors, (e) => e.clearEditOptions());
     editor.showEditOptions();
+  }
+
+  handleLayerEdits(event, editable) {
+    let node = $(editable).attr('data-leaf-node');
+
+    // Each child in the layer is an element. We map over to retain ordering
+    let children = _.map($(editable).children(), (child, i) => {
+      
+      let $child = $(child);
+      let id = null;
+      if ($child.hasClass('leaf-text-layer')) {
+        // it's a text layer
+        id = $child.attr('data-leaf-text-id');
+        return { id, content: this.convertTextLayerToContent($child) };
+      } else if ($child.hasClass('leafbuilder-el-container')) {
+        // it's a block level element
+        id = $child.children('.leaf-element').attr('data-leaf-el');
+        return { id, content: null };
+      } else {
+        // It's a newly created element
+        return { id: null, content: this.convertTextLayerToContent($child) };
+      }
+    });
+    console.log(children);
+  }
+
+  convertTextLayerToContent($layer) {
+    // convert back to standard storage format by cloning original
+    // and parsing out the id and making a string with embedded ids
+    // like <<3>> so.
+    let $clone = $layer.clone();
+    let $clonedChildren = $clone.children('.leafbuilder-el-container');
+    let $originalChildren = $layer.children('.leafbuilder-el-container');
+    _.each($clonedChildren, function(clonedChild, i) {
+      let childId = $originalChildren.eq(i)
+                      .children('.leaf-element').attr('data-leaf-el');
+      $(clonedChild).replaceWith('<<' + childId + '>>');
+    });
+    return $clone.text();
   }
 
   deconstruct() {
