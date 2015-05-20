@@ -20,13 +20,11 @@ configuration.manifests = {
 let config = new ConfigModel(configuration);
 
 let $lb = $('#leafbuilder').html(`
-  <div id="leaf">
-    <div id="top-node"></div>
-  </div>
+  <div class="leaf"></div>
   <div class="toolbox"></div>
 `);
 
-let options = { el: $('#top-node')[0] };
+let options = { el: $lb.find('.leaf')[0] };
 let leaf = new Leaf(configuration, options);
 let toolbox = new Toolbox($lb.children('.toolbox'), leaf, configuration.manifests);
 let tree = new LayerTree(leaf, $lb, config, toolbox);
