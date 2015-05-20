@@ -20,7 +20,7 @@ class LayerTree {
 
   // nodeString looks like "3.0.1.3"
   addLayer(nodeString, $childEl) {
-    $childEl.wrap('<div class="leafbuilder-container" style="display: inline-block"></div>');
+    $childEl.wrap('<div class="leafbuilder-container"></div>');
     let $el = $childEl.parent();
     let hover = new LayerHover($el);
 

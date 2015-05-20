@@ -9,8 +9,10 @@ class ElementEditor extends mixin(class Base{}, events) {
     this.toolbox = toolbox;
 
     this.$original = $original;
-    $original.wrap('<div class="leafbuilder-el-container" style="display: inline-block"></div>');
+    $original.wrap('<div class="leafbuilder-el-container"></div>');
     this.$el = $original.parent();
+    // parent inherits child's display style
+    this.$el.css('display', $original.css('display'));
     this.$el.append(`
       <style> ${ require('./styles/element-editor.css.js') } </style>
     `);

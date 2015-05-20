@@ -12,7 +12,6 @@ module.exports = `
 */
 
 .leafbuilder-container {
-  display: inline-block;
   position: relative;
 }
 
