@@ -38,6 +38,10 @@ class LayerEditor extends mixin(class Base{}, events) {
     editor.showEditOptions();
   }
 
+  // This code isn't really pretty, but it's my attempt at utilizing
+  // medium editor to its fullest extent and putting off building my
+  // own full-fledged implementation for a later date. We abuse the
+  // dom here and infer everything based on the output of Med Editor.
   handleLayerEdits(event, editable) {
     let node = $(editable).attr('data-leaf-node');
 
