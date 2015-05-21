@@ -6,11 +6,12 @@ const FormSmith = require('../submodules/formsmith/src/formsmith');
 
 class Toolbox extends mixin(class Base{}, events) {
 
-  constructor($el, leaf, manifests) {
+  constructor($el, leaf, manifests, configModel) {
     super();
     this.$el = $el;
     this.leaf = leaf;
     this.manifests = manifests;
+    this.config = configModel;
     $el.html(`
       <style> ${ require('./styles/toolbox.css.js') } </style>
       <ul class='toolbox-options'>
@@ -25,7 +26,8 @@ class Toolbox extends mixin(class Base{}, events) {
   }
 
   // caution here, as toolbox is becoming knowledgeable about parent
-  show(rect, id) {
+  show($elementEl, id) {
+    let rect = $elementEl[0].getBoundingClientRect();
     this.$el.css({
       top: rect.top - this.$el.parent().offset().top,
       left: rect.right - this.$el.parent().offset().left + 5
@@ -48,7 +50,10 @@ class Toolbox extends mixin(class Base{}, events) {
     let schema = this.manifests[leafEl.elementData.type].configSchema;
     let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0]);
     this.$drawer.show();
-    fs.onChange((config) => leafEl.rebuild(config));
+    fs.onChange((newConfig) => {
+      this.config.transformElementConfig(this.id, newConfig);
+      leafEl.rebuild(newConfig);
+    });
   }
 
 }

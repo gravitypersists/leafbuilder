@@ -41,6 +41,14 @@ class ConfigModel {
     this.save();
   }
 
+  transformElementConfig(elementId, newConfig) {
+    let split = elementId.split(':');
+    let node = this.data.content[split[0]];
+    let elementNode = node.children[split[1]];
+    elementNode.config = newConfig;
+    this.save();
+  }
+
   save() {
     let modified = this.data;
     localStorage.setItem('leaf-config', JSON.stringify(this.data));
