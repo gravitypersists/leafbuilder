@@ -80,6 +80,7 @@ module.exports = `
   width: 100%;
   height: 100%;
   background-color: rgba(192, 231, 255, 0.22);
+  border: 1px solid rgba(0, 148, 255, 0.25);
 }
 
 

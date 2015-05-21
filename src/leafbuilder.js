@@ -23,6 +23,7 @@ let config = new ConfigModel(configuration);
 let $lb = $('#leafbuilder').html(`
   <div class="leaf"></div>
   <div class="toolbox"></div>
+  <div id="detached"></div>
 `);
 
 let options = { el: $lb.find('.leaf')[0] };

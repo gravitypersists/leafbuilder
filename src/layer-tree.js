@@ -59,6 +59,7 @@ class LayerTree {
     this.returnDetachments();
     this.clearHoverClasses();
     this.$el.removeClass('editing-layer');
+    $('#detached').hide();
   }
 
   handleChildHoveredIn(node) {
@@ -120,10 +121,9 @@ class LayerTree {
     $goods.detach(); // $.detach will prob not work in future shadow dom
     let $detached = $('<div class="detached"></div>');
     $detached.append($goods);
-    this.$el.append($detached);
+    $('#detached').show().append($detached);
     // note that $.offset() does not work with shadow dom'd elements
     $detached.css({
-      position: 'absolute',
       top: $ghost[0].getBoundingClientRect().top - this.$el.offset().top,
       left: $ghost[0].getBoundingClientRect().left - this.$el.offset().left
     });
