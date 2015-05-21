@@ -17,6 +17,7 @@ class LayerEditor extends mixin(class Base{}, events) {
         <li class='config'></li>
       </ul>
     `);
+    this.$el.children('.leaf-layer').addClass('editing');
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');

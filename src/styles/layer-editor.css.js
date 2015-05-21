@@ -22,24 +22,24 @@ module.exports = `
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.9);
+  background-image: url('./assets/down-arrow.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .leafbuilder-container.hovered:after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -2px;
+  left: -2px;
+  padding: 2px;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 1);
-  background-image: url('./assets/down-arrow.gif');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
   pointer-events: none;
   opacity: 0.5;
-  border: 1px solid #ccc;
+  border: 1px solid red;
   border-radius: 3px;
 }
 
@@ -67,5 +67,20 @@ module.exports = `
   height: 20px;
   background-color: red;
 }
+
+.leafbuilder-el-container {
+  position: relative;
+}
+
+.leaf-layer.editing .leafbuilder-el-container:hover:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(192, 231, 255, 0.22);
+}
+
 
 `
