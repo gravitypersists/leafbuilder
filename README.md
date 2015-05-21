@@ -9,6 +9,8 @@ The [leaf](https://github.com/gravitypersists/leaf) repo is a standalone renderi
  - layout engine formalization. Starting with 'Document' layout engine type (ongoing task)
  - data persistence (perhaps Firebase for start, data should be exposed though and leafbuilder should be consumed by a CMS like application)
  - alert parent layers upon child layer edits to resize the them
+ - similarly, reposition toolbox on element edits to account for resizes
+ - ability to set custom layout box widths/height (if appropriate, aka Document only requires width)
  - element picker prompt (to find and input elements)
  - generalize element instantiation (research web components, html imports, etc)
  - custom implementation of copy and paste to allow for elements to be copied and moved around

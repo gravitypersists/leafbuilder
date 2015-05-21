@@ -8,7 +8,8 @@ const ConfigModel = require('./config');
 // these things will be packaged up appropriately in the future
 let basicConfig = require('../submodules/leaf/examples/basic.json');
 let stored = localStorage.getItem('leaf-config');
-let configuration = stored || basicConfig;
+let parsed = (stored) ? JSON.parse(stored) : null;
+let configuration = parsed || basicConfig;
 configuration.manifests = {
   Text: require('../submodules/leaf/src/elements/text/manifest.json'),
   Katex: require('../submodules/leaf/src/elements/katex/manifest.json'),

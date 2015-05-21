@@ -43,6 +43,9 @@ class LayerEditor extends mixin(class Base{}, events) {
   // medium editor to its fullest extent and putting off building my
   // own full-fledged implementation for a later date. We abuse the
   // dom here and infer everything based on the output of Med Editor.
+  // 
+  // It is highly coupled with the Document layout engine, so much so
+  // that I think I need to find a way to incorporate it into that.
   handleLayerEdits(event, editable) {
     let node = $(editable).attr('data-leaf-node');
 
@@ -64,7 +67,7 @@ class LayerEditor extends mixin(class Base{}, events) {
         return { id: null, content: this.convertTextLayerToContent($child) };
       }
     });
-    console.log(children);
+    this.config.transformLayerNode(node, children);
   }
 
   convertTextLayerToContent($layer) {
