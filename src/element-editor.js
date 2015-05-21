@@ -24,7 +24,7 @@ class ElementEditor extends mixin(class Base{}, events) {
   showEditOptions() {
     this.$el.addClass('editing');
     let elId = this.$el.children('.leaf-element').attr('data-leaf-el');
-    let layerId = this.$el.parent().attr('data-leaf-node');
+    let layerId = this.$el.parents('.leaf-layer').attr('data-leaf-node');
     this.toolbox.show(this.$el[0].getBoundingClientRect(), layerId+':'+elId);
     // use mousedown here instead of click to avoid click invoking 
     // showEditOptions from automatically invoking the handler

@@ -19,7 +19,8 @@ class LayerEditor extends mixin(class Base{}, events) {
     `);
 
     this.editors = [];
-    _.each(this.$el.find('.leaf-element'), (el, i) => {
+    let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
+    _.each(innerEls, (el, i) => {
       let elEditor = new ElementEditor($(el), toolbox);
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
@@ -50,9 +51,9 @@ class LayerEditor extends mixin(class Base{}, events) {
       
       let $child = $(child);
       let id = null;
-      if ($child.hasClass('leaf-text-layer')) {
+      if ($child.hasClass('leaf-text-el')) {
         // it's a text layer
-        id = $child.attr('data-leaf-text-id');
+        id = $child.attr('data-leaf-el');
         return { id, content: this.convertTextLayerToContent($child) };
       } else if ($child.hasClass('leafbuilder-el-container')) {
         // it's a block level element
