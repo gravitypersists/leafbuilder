@@ -84,14 +84,14 @@ class LayerEditor extends mixin(class Base{}, events) {
     // and parsing out the id and making a string with embedded ids
     // like so: "blah <div leaf 3>...</div> blah" -> "blah <<3>> blah"
     let $clone = $layer.clone();
-    let $clonedChildren = $clone.children('.leafbuilder-el-container');
-    let $originalChildren = $layer.children('.leafbuilder-el-container');
+    let $clonedChildren = $clone.find('.leafbuilder-el-container');
+    let $originalChildren = $layer.find('.leafbuilder-el-container');
     _.each($clonedChildren, function(clonedChild, i) {
       let childId = $originalChildren.eq(i)
                       .children('.leaf-element').attr('data-leaf-el');
       $(clonedChild).replaceWith('<<' + childId + '>>');
     });
-    return $clone.text();
+    return _.unescape($clone.html());
   }
 
   deconstruct() {
