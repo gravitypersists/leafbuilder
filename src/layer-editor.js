@@ -51,30 +51,38 @@ class LayerEditor extends mixin(class Base{}, events) {
     let node = $(editable).attr('data-leaf-node');
 
     // Each child in the layer is an element. We map over to retain ordering
-    let children = _.map($(editable).children(), (child, i) => {
-      
+    let childrenIds = _.map($(editable).children(), (child, i) => {
       let $child = $(child);
       let id = null;
+
       if ($child.hasClass('leaf-text-el')) {
+
         // it's a text layer
         id = $child.attr('data-leaf-el');
-        return { id, content: this.convertTextLayerToContent($child) };
+        this.config.transformTextNode(node, id, this.convertTextLayerToContent($child))
+        return id;
+
       } else if ($child.hasClass('leafbuilder-el-container')) {
+
         // it's a block level element
         id = $child.children('.leaf-element').attr('data-leaf-el');
-        return { id, content: null };
+        return id;
+
       } else {
-        // It's a newly created element
-        return { id: null, content: this.convertTextLayerToContent($child) };
+
+        // It's a newly created element, so we must create it
+        id = this.config.addTextNode(node, this.convertTextLayerToContent($child))
+        return id;
+
       }
     });
-    this.config.transformLayerNode(node, children);
+    this.config.transformDocumentLayout(node, childrenIds);
   }
 
   convertTextLayerToContent($layer) {
     // convert back to standard storage format by cloning original
     // and parsing out the id and making a string with embedded ids
-    // like <<3>> so.
+    // like so: "blah <div leaf 3>...</div> blah" -> "blah <<3>> blah"
     let $clone = $layer.clone();
     let $clonedChildren = $clone.children('.leafbuilder-el-container');
     let $originalChildren = $layer.children('.leafbuilder-el-container');

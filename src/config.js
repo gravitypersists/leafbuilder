@@ -11,15 +11,33 @@ class ConfigModel {
     this.data = raw;
   }
 
-  transformLayerNode(nodeId, children) {
+  transformTextNode(nodeId, textElementId, content) {
     let node = this.data.content[nodeId];
-    // straight up manip the data in place for now. Just trying to
-    // get something that works for the time being, it's ugly temp.
-    _.each(children, (child) => {
-      if (child.content) {
-        node.children[child.id].config.text.content = child.content;
+    // manipulate it in place
+    node.children[textElementId].config.text.content = content;
+    this.save();
+  }
+
+  addTextNode(nodeId, content) {
+    let node = this.data.content[nodeId];
+    let newIndex = Math.max.apply(null, _.keys(node.children)) + 1;
+    node.children[newIndex] = {
+      "elementId": newIndex,
+      "type": "Text",
+      "config": {
+        "text": {
+          "content": content,
+          "children": {}
+        }
       }
-    });
+    };
+    this.save();
+    return newIndex;
+  }
+
+  transformDocumentLayout(nodeId, array) {
+    let node = this.data.content[nodeId];
+    node.layout.config.array = array;
     this.save();
   }
 
