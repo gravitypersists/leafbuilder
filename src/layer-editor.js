@@ -26,13 +26,15 @@ class LayerEditor extends mixin(class Base{}, events) {
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
     });
-    let me = new MediumEditor(this.$el.find('.leaf-layer')[0], {
+    let $editorEl = this.$el.find('.leaf-layer');
+    let me = new MediumEditor($editorEl[0], {
       buttons: ['bold', 'italic', 'quote'],
       paste: {
           forcePlainText: false
       }
     });
     me.subscribe('editableInput', this.handleLayerEdits.bind(this));
+    $editorEl.focus();
   }
 
   handleElementEditorClick(editor) {
