@@ -20,7 +20,9 @@ class ConfigModel {
 
   addTextNode(nodeId, content) {
     let node = this.data.content[nodeId];
-    let newIndex = Math.max.apply(null, _.keys(node.children)) + 1;
+    // concat to [-1] in case node.children is empty {}
+    let ids = [-1].concat(_.keys(node.children));
+    let newIndex = Math.max.apply(null, ids) + 1;
     node.children[newIndex] = {
       "elementId": newIndex,
       "type": "Text",
