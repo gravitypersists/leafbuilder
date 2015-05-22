@@ -52,7 +52,6 @@ module.exports = `
 }
 
 .leafbuilder-container .leaf-layer:empty {
-  /* !important: need to override setting by layout engine */
   min-width: 50px;
   min-height: 20px;
   background-color: rgb(203, 203, 203);
@@ -100,6 +99,11 @@ module.exports = `
   height: 100%;
   background-color: rgba(192, 231, 255, 0.22);
   border: 1px solid rgba(0, 148, 255, 0.25);
+}
+
+.medium-editor-placeholder {
+  min-width: 50px;
+  min-height: 20px;
 }
 
 

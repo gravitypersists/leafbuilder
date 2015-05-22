@@ -31,7 +31,9 @@ class LayerEditor extends mixin(class Base{}, events) {
       buttons: ['bold', 'italic', 'quote'],
       paste: {
           forcePlainText: false
-      }
+      },
+      // placeholder: false //doesn't work like medium editor's docs says
+      placeholder: ''
     });
     me.subscribe('editableInput', this.handleLayerEdits.bind(this));
     $editorEl.focus();
