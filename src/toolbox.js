@@ -3,6 +3,7 @@ const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
 const FormSmith = require('../submodules/formsmith/src/formsmith');
+const EmbeddedLayerFSPlugin = require('./misc/fs-embedded-layer');
 
 class Toolbox extends mixin(class Base{}, events) {
 
@@ -48,7 +49,13 @@ class Toolbox extends mixin(class Base{}, events) {
   handleConfig(e) {
     let leafEl = this.leaf.getElementById(this.id);
     let schema = this.manifests[leafEl.elementData.type].configSchema;
-    let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0]);
+    let plugin = new EmbeddedLayerFSPlugin(this.config, this.id.split(':')[0]);
+    let options = {
+      plugins: {
+        EmbeddedLayer: plugin
+      }
+    }
+    let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0], options);
     this.$drawer.show();
     fs.onChange((newConfig) => {
       this.config.transformElementConfig(this.id, newConfig);

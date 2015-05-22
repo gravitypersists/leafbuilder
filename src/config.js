@@ -51,6 +51,31 @@ class ConfigModel {
     this.save();
   }
 
+  addLayerNode(baseNode) {
+    let currentNodes = _.keys(this.data.content);
+    let nodesOnSameLayer = _.filter(currentNodes, (n) => {
+      // matches 2.3.5 if baseNode is 2.3, but not 2.3.5.1
+      return n.match(new RegExp(baseNode + '.[0-9]+$')); 
+    });
+    let ids = _.map(nodesOnSameLayer, (n) => _.last(n.split('.')));
+    let newIdOnLayer = Math.max.apply(null, [-1].concat(ids)) + 1;
+    let newId = baseNode + '.' + newIdOnLayer;
+    // TODO: move these defaults somewhere more sensible, perhaps
+    // adjustable according to author preferences or patterns.
+    this.data.content[newId] = {
+      layerId: newId,
+      children: {},
+      layout: {
+        type: "Document",
+        config: {
+          array: []
+        }
+      }
+    };
+    this.save()
+    return newId;
+  }
+
   save() {
     let modified = this.data;
     localStorage.setItem('leaf-config', JSON.stringify(this.data));
