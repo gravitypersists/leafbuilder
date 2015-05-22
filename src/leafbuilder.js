@@ -41,8 +41,17 @@ $(document.body).on('keydown', (e) => {
   }
 });
 
-_.each($('html /deep/ .leaf-layer'), (el, i) => {
-  var node = el.getAttribute('data-leaf-node');
-  tree.addLayer(node.split(':')[0], $(el));
+function loadElementsIntoTree(elements) {
+  _.each(elements, (el, i) => {
+    var node = el.getAttribute('data-leaf-node');
+    tree.addLayer(node.split(':')[0], $(el));
+  });
+}
+loadElementsIntoTree($('html /deep/ .leaf-layer'));
+
+// toolbox knows when a portion of the tree has been rerendered.
+// That's probably more than toolbox should know.
+toolbox.on('elementRedraw', () => {
+  loadElementsIntoTree($('#detached /deep/ .leaf-layer'));
 });
 

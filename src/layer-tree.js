@@ -132,7 +132,7 @@ class LayerTree {
     let le = new LayerEditor($detached, this.config, this.toolbox);
 
     // finally retain them for convenience later on when leaving edit mode
-    this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost, le })
+    this.detachments.push({ $origin: node.$el, $goods, $detached, $ghost, le });
   }
 
   returnDetachments() {

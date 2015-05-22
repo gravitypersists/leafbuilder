@@ -47,19 +47,22 @@ class Toolbox extends mixin(class Base{}, events) {
   }
 
   handleConfig(e) {
-    let leafEl = this.leaf.getElementById(this.id);
-    let schema = this.manifests[leafEl.elementData.type].configSchema;
+    let leafElement = this.leaf.getElementById(this.id);
+    let schema = this.manifests[leafElement.elementData.type].configSchema;
     let plugin = new EmbeddedLayerFSPlugin(this.config, this.id.split(':')[0]);
     let options = {
       plugins: {
         EmbeddedLayer: plugin
       }
     }
-    let fs = new FormSmith(schema, leafEl.elementData.config, this.$drawer[0], options);
+    let fs = new FormSmith(schema, leafElement.elementData.config, this.$drawer[0], options);
     this.$drawer.show();
     fs.onChange((newConfig) => {
       this.config.transformElementConfig(this.id, newConfig);
-      leafEl.rebuild(newConfig);
+      leafElement.rebuild(newConfig);
+      // and now that we've rerendered that element, we need to let
+      // others know so they can reinstantiate leafbuilder decorators
+      this.emit('elementRedraw', this.id);
     });
   }
 
