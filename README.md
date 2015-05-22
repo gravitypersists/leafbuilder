@@ -4,6 +4,21 @@ An authoring tool for creating dynamic documents
 The [leaf](https://github.com/gravitypersists/leaf) repo is a standalone rendering framework, this repo is for constructing those leaves. 
 
 
+## Development
+
+This repository relies on other repositories. To pull those in, you will need to run the famous:
+
+`git submodule update --init --recursive`
+
+Also run:
+
+`npm install`
+
+`gulp` (assuming gulp is installed `npm install -g gulp`)
+
+There is no server required. Simply open `index.html`.
+
+
 ### Todos (these todos are a mix of both this repo and the bare Leaf repo)
 
  - layout engine formalization. Starting with 'Document' layout engine type (ongoing task)
