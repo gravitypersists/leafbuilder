@@ -51,6 +51,25 @@ module.exports = `
   display: inline-block;
 }
 
+.leafbuilder-container .leaf-layer:empty {
+  /* !important: need to override setting by layout engine */
+  min-width: 50px;
+  min-height: 20px;
+  background-color: rgb(203, 203, 203);
+  display: table;
+  text-align: center;
+}
+
+.leafbuilder-container .leaf-layer:empty:after {
+  content: "empty";
+  font-size: 12px;
+  font-family: "Helvetica";
+  font-style: italic;
+  color: rgb(102, 102, 102);
+  display: table-cell;
+  vertical-align: middle;
+}
+
 .layer-menu {
   display: none;
   position: absolute;

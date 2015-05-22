@@ -7,6 +7,7 @@ module.exports = `
 .leafbuilder-el-container.editing:after {
   content: "";
   position: absolute;
+  /* !important: this el uses another :after when not editing */
   top: -2px !important;
   left: -2px !important;
   width: 100%;
