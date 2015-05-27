@@ -11,31 +11,7 @@ class ConfigModel {
     this.data = raw;
   }
 
-  transformTextNode(nodeId, textElementId, content) {
-    let node = this.data.content[nodeId];
-    // manipulate it in place
-    node.children[textElementId].config.text.content = content;
-    this.save();
-  }
-
-  addTextNode(nodeId, content) {
-    let node = this.data.content[nodeId];
-    // concat to [-1] in case node.children is empty {}
-    let ids = [-1].concat(_.keys(node.children));
-    let newIndex = Math.max.apply(null, ids) + 1;
-    node.children[newIndex] = {
-      "elementId": newIndex,
-      "type": "Text",
-      "config": {
-        "text": {
-          "content": content,
-          "children": {}
-        }
-      }
-    };
-    this.save();
-    return newIndex;
-  }
+  getLayerNode(id) { return this.data.content[id] }
 
   transformDocumentLayout(nodeId, array) {
     let node = this.data.content[nodeId];
@@ -43,12 +19,46 @@ class ConfigModel {
     this.save();
   }
 
-  transformElementConfig(elementId, newConfig) {
-    let split = elementId.split(':');
+  addElement(nodeId, type) {
+    let node = this.data.content[nodeId];
+    // concat to [-1] in case node.children is empty {}
+    let ids = [-1].concat(_.keys(node.children));
+    let newId = Math.max.apply(null, ids) + 1;
+    node.children[newId] = {
+      "elementId": newId,
+      "type": type,
+      "config": this.data.manifests[type].defaultConfig || {}
+    };
+    this.save();
+    return newId;
+  }
+
+  // compositeId here looks like "0.2:2" which is layer id:element id
+  transformElementConfig(compositeId, newConfig) {
+    let split = compositeId.split(':');
     let node = this.data.content[split[0]];
     let elementNode = node.children[split[1]];
     elementNode.config = newConfig;
     this.save();
+  }
+
+  // convenience method for adding new element of type Text
+  addTextNode(nodeId, content) {
+    let newId = this.addElement(nodeId, "Text");
+    let node = this.data.content[nodeId];
+    node.children[newId].config.text.content = content;
+    return newId;
+  }
+
+  transformTextNode(compositeId, content) {
+    this.transformElementConfig(compositeId, { "text": { "content": content }});
+  }
+
+  // content is an array of elements
+  transformLayerNode(nodeId, children, layout) {
+    let node = this.data.content[nodeId];
+    node.children = _.groupBy('elementId', children);
+    node.layout = layout;
   }
 
   addLayerNode(baseNode) {
