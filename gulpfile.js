@@ -9,7 +9,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 
-var bundler = watchify(browserify('./src/leafbuilder.js', watchify.args));
+var bundler = watchify(browserify('./index.js', watchify.args));
 bundler.transform('babelify');
 gulp.task('browserify', bundle);
 bundler.on('update', bundle);
