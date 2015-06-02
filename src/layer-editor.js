@@ -1,5 +1,7 @@
 const $ = require('jquery');
 const _ = require('lodash');
+const fs = require('fs');
+const styles = fs.readFileSync(__dirname + '/../styles/layer-editor.css', 'utf8')
 const mixin = require('./util/mixin');
 const events = require('./util/events');
 const ElementEditor = require('./element-editor');
@@ -12,7 +14,7 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.$el = $el;
     this.config = config;
     this.$el.append(`
-      <style> ${ require('./styles/layer-editor.css.js') } </style>
+      <style> ${ styles } </style>
       <ul class='layer-menu'>
         <li class='config'></li>
       </ul>

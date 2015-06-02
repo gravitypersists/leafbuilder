@@ -1,6 +1,8 @@
 const $ = require('jquery');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
+const fs = require('fs');
+const styles = fs.readFileSync(__dirname + '/../styles/element-editor.css', 'utf8')
 
 class ElementEditor extends mixin(class Base{}, events) {
 
@@ -14,7 +16,7 @@ class ElementEditor extends mixin(class Base{}, events) {
     // parent inherits child's display style
     this.$el.css('display', $original.css('display'));
     this.$el.append(`
-      <style> ${ require('./styles/element-editor.css.js') } </style>
+      <style> ${ styles } </style>
     `);
 
     this.$el.on('click', (e) => this.handleClick());

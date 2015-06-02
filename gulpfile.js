@@ -8,9 +8,11 @@ var install = require('gulp-install');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var brfs = require('brfs');
 
 var bundler = watchify(browserify('./index.js', watchify.args));
 bundler.transform('babelify');
+bundler.transform(brfs);
 gulp.task('browserify', bundle);
 bundler.on('update', bundle);
 

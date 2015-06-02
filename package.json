@@ -18,6 +18,7 @@
   "homepage": "https://github.com/gravitypersists/leafbuilder#readme",
   "devDependencies": {
     "babelify": "^6.1.0",
+    "brfs": "^1.4.0",
     "browserify": "^9.0.8",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",

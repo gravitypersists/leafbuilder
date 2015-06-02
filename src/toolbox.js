@@ -4,6 +4,8 @@ const mixin = require('./util/mixin');
 const events = require('./util/events');
 const FormSmith = require('../submodules/formsmith/src/formsmith');
 const EmbeddedLayerFSPlugin = require('./misc/fs-embedded-layer');
+const fs = require('fs');
+const styles = fs.readFileSync(__dirname + '/../styles/toolbox.css', 'utf8')
 
 class Toolbox extends mixin(class Base{}, events) {
 
@@ -14,7 +16,7 @@ class Toolbox extends mixin(class Base{}, events) {
     this.manifests = manifests;
     this.config = configModel;
     $el.html(`
-      <style> ${ require('./styles/toolbox.css.js') } </style>
+      <style> ${ styles } </style>
       <ul class='toolbox-options'>
         <li class='config'></li>
       </ul>
@@ -55,9 +57,9 @@ class Toolbox extends mixin(class Base{}, events) {
         EmbeddedLayer: plugin
       }
     }
-    let fs = new FormSmith(schema, leafElement.elementData.config, this.$drawer[0], options);
+    let formSmith = new FormSmith(schema, leafElement.elementData.config, this.$drawer[0], options);
     this.$drawer.show();
-    fs.onChange((newConfig) => {
+    formSmith.onChange((newConfig) => {
       this.config.transformElementConfig(this.id, newConfig);
       leafElement.rebuild(newConfig);
       // and now that we've rerendered that element, we need to let
