@@ -21,6 +21,7 @@ let manifests = {
   Switch: require('../submodules/leaf/src/elements/switch/manifest.json'),
   EventButton: require('../submodules/leaf/src/elements/event-button/manifest.json'),
   LogicalStatement: require('../submodules/leaf/src/elements/logical-statement/manifest.json'),
+  Question: require('../submodules/leaf/src/elements/question/manifest.json'),
 }
 
 function loadElementsIntoTree(elements, tree) {
@@ -48,8 +49,8 @@ class LeafBuilder {
     // as a bunch of arguments to a constructor isn't pleasing
     let options = { el: $main.children('.leaf')[0] };
     let leaf = new Leaf(configuration, options);
-    let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let config = new ConfigModel(configuration);
+    let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
 
     // TODO need to scope this
