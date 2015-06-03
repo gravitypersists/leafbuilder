@@ -6,46 +6,7 @@
     body {
       margin: 0;
     }
-    #leafbuilder {
-      position: relative;
-      margin: 0 auto;
-      font-family: sans-serif;
-      text-align: center;
-    }
-    #leafbuilder.editing-layer #leaf:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(200, 200, 255, 0.3);
-      pointer-events: none;
-    }
-    #leafbuilder.editing-layer #leaf {
-      opacity: 0.6;
-    }
-    #detached {
-      display: none;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 155, 155, 0.76);
-      position: fixed;
-      top: 0;
-    }
-    .detached {
-      position: absolute;
-      background-color: white;
-    }
-    .leaf {
-      display: inline-block;
-    }
-    #leafbuilder > * {
-      text-align: left;
-    }
-
   </style>
-  <link rel="stylesheet" type="text/css" href="node_modules/medium-editor/dist/css/medium-editor.css">
   <link rel="stylesheet" type="text/css" href="submodules/formsmith/styles/formsmith.css">
   <link rel="stylesheet" type="text/css" href="styles/formsmith-custom.css">
 </head>
