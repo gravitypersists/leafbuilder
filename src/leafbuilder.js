@@ -39,16 +39,18 @@ class LeafBuilder {
       <div class="leafbuilder-main-container">
         <div class="leaf"></div>
         <div class="toolbox"></div>
-        <div id="detached"></div>
+        <div class="detached-container"></div>
       </div>
     `);
     let $main = this.$el.find('.leafbuilder-main-container');
     configuration.manifests = manifests;
+    // TODO: think about a better way to pass around "globals",
+    // as a bunch of arguments to a constructor isn't pleasing
     let options = { el: $main.children('.leaf')[0] };
     let leaf = new Leaf(configuration, options);
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let config = new ConfigModel(configuration);
-    let tree = new LayerTree(leaf, $main, config, toolbox);
+    let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
 
     // TODO need to scope this
     loadElementsIntoTree($('html /deep/ .leaf-layer'), tree);

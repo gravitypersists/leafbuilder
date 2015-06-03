@@ -6,10 +6,11 @@ const LayerEditor = require('./layer-editor.js');
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree {
 
-  constructor(leaf, $el, config, toolbox) {
+  constructor(leaf, $el, config, toolbox, $detachments) {
     this.$el = $el;
     this.toolbox = toolbox;
     this.config = config;
+    this.$detachments = $detachments;
     // worth noting that this.data structure is self-referential, so cannot be serialized 
     this.data = null;
     this.editMode = false;
@@ -59,7 +60,7 @@ class LayerTree {
     this.returnDetachments();
     this.clearHoverClasses();
     this.$el.removeClass('editing-layer');
-    $('#detached').hide();
+    this.$detachments.hide();
   }
 
   handleChildHoveredIn(node) {
@@ -121,7 +122,7 @@ class LayerTree {
     $goods.detach(); // $.detach will prob not work in future shadow dom
     let $detached = $('<div class="detached"></div>');
     $detached.append($goods);
-    $('#detached').show().append($detached);
+    this.$detachments.show().append($detached);
     // note that $.offset() does not work with shadow dom'd elements
     $detached.css({
       top: $ghost[0].getBoundingClientRect().top - this.$el.offset().top,
