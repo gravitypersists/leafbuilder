@@ -53,7 +53,7 @@ class LeafBuilder {
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
 
-    // TODO need to scope this
+    // TODO need to scope this selector
     loadElementsIntoTree($('html /deep/ .leaf-layer'), tree);
 
     // toolbox knows when a portion of the tree has been rerendered.
@@ -63,9 +63,6 @@ class LeafBuilder {
     });
 
     $(document.body).on('keydown', (e) => {
-      if (e.keyCode === 192) { // ` character
-        tree.toggleEditMode();
-      }
       if (e.keyCode === 27) { // esc
         tree.escape();
       }

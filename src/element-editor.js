@@ -20,6 +20,7 @@ class ElementEditor extends mixin(class Base{}, events) {
     `);
 
     this.$el.on('click', (e) => this.handleClick());
+    this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
     this.boundHandler = this.handleBodyClick.bind(this);
   }
 
@@ -47,12 +48,30 @@ class ElementEditor extends mixin(class Base{}, events) {
   }
 
   handleClick() {
-    this.emit('click');
+    if (this.hovered) this.emit('click');
   }
 
   deconstruct() {
     this.clearEditOptions();
     this.$el.html(this.$original).children('.leaf-element').unwrap();
+  }
+
+  onHoverIn(e) {
+    this.emit('hoverIn');
+  }
+
+  onHoverOut(e) {
+    this.emit('hoverOut');
+  }
+
+  resetClasses() {
+    this.hovered = false;
+    this.$el.removeClass('hovered');
+  }
+
+  setHovered(bool = true) {
+    this.hovered = bool;
+    (bool) ? this.$el.addClass('hovered') : this.$el.removeClass('hovered');
   }
 
 }

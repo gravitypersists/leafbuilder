@@ -19,7 +19,15 @@ class LayerEditor extends mixin(class Base{}, events) {
         <li class='config'></li>
       </ul>
     `);
-    this.$el.children('.leaf-layer').addClass('editing');
+    this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
+    this.$el.on('click', this.onClick.bind(this));
+
+    let $layer = this.$el.children('.leaf-layer');
+    $layer.attr('contenteditable', true);
+    $layer.on('focus', () => {
+      if (!this.notHoverable) this.$el.addClass('editing');
+    });
+    $layer.on('blur', () => this.$el.removeClass('editing'));
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
@@ -27,6 +35,8 @@ class LayerEditor extends mixin(class Base{}, events) {
       let elEditor = new ElementEditor($(el), toolbox);
       this.editors.push(elEditor);
       elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
+      elEditor.on('hoverIn', (e) => this.handleChildHoveredIn(elEditor));
+      elEditor.on('hoverOut', (e) => this.handleChildHoveredOut(elEditor));
     });
     let $editorEl = this.$el.find('.leaf-layer');
   }
@@ -34,6 +44,44 @@ class LayerEditor extends mixin(class Base{}, events) {
   handleElementEditorClick(editor) {
     _.each(this.editors, (e) => e.clearEditOptions());
     editor.showEditOptions();
+  }
+
+  onClick(e) {
+    if (this.hovered) this.emit('click', e);
+  }
+
+  onHoverIn(e) {
+    this.emit('hoverIn');
+  }
+
+  onHoverOut(e) {
+    this.emit('hoverOut');
+  }
+
+  resetClasses() {
+    this.$el.removeClass('hovered');
+    _.each(this.editors, (e) => e.resetClasses());
+  }
+
+  setHovered(bool = true) {
+    this.hovered = true;
+    (bool) ? this.$el.addClass('hovered') : this.$el.removeClass('hovered');
+  }
+
+  preventHoverables() {
+    this.notHoverable = true;
+  }
+
+  // A pretty naive approach for the time being, will need to use
+  // something more robust than hover events in the future
+  handleChildHoveredIn(editor) {
+    this.setHovered(false);
+    editor.setHovered(true);
+  }
+
+  handleChildHoveredOut(editor) {
+    if (!this.notHoverable) this.setHovered(true);
+    editor.setHovered(false);
   }
 
   // // This code isn't really pretty, but it's my attempt at utilizing
