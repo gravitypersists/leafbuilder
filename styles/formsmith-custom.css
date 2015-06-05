@@ -8,6 +8,28 @@
   pointer-events: none;
 }*/
 
-.fs-embedded-layer {
-  
+.fs-embedded-layer, .fs-textarea {
+  outline: none;
+  border: 1px solid rgb(168, 168, 168);
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fs-child {
+  background-color: rgb(47, 49, 86);
+  border-top: 1px solid rgb(10, 13, 26);
+}
+
+.fs-array-delete:after {
+  color: rgb(47, 49, 86);
+  font-size: 10px;
+  font-family: 'Helvetica';
+  box-sizing: border-box;
+  background-color: rgb(104, 102, 148);
+}
+
+.fs-array-add {
+  background-color: rgb(47, 49, 86);
+  border-bottom: 1px solid rgb(21, 22, 39);
 }
