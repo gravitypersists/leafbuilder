@@ -18,7 +18,9 @@ class Toolbox extends mixin(class Base{}, events) {
     $el.html(`
       <style> ${ styles } </style>
       <ul class='toolbox-options'>
-        <li class='config'></li>
+        <li class='config'>
+          <i class='fa fa-cog'></i>
+        </li>
       </ul>
       <div class='toolbox-drawer'></div>
     `);
@@ -33,7 +35,7 @@ class Toolbox extends mixin(class Base{}, events) {
     let rect = $elementEl[0].getBoundingClientRect();
     this.$el.css({
       top: rect.top - this.$el.parent().offset().top,
-      left: rect.right - this.$el.parent().offset().left + 5
+      left: rect.right - this.$el.parent().offset().left
     });
     this.$el.show();
     this.$drawer.empty().hide();
