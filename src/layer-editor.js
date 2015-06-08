@@ -23,11 +23,6 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.$el.on('click', this.onClick.bind(this));
 
     let $layer = this.$el.children('.leaf-layer');
-    $layer.attr('contenteditable', true);
-    $layer.on('focus', () => {
-      if (!this.notHoverable) this.$el.addClass('editing');
-    });
-    $layer.on('blur', () => this.$el.removeClass('editing'));
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
@@ -39,6 +34,15 @@ class LayerEditor extends mixin(class Base{}, events) {
       elEditor.on('hoverOut', (e) => this.handleChildHoveredOut(elEditor));
     });
     let $editorEl = this.$el.find('.leaf-layer');
+
+    // Setup text editing functionality, must come after element editor setups
+    $layer.attr('contenteditable', true);
+    $layer.find('.leafbuilder-el-container').attr('contenteditable', false)
+    $layer.on('focus', () => {
+      if (!this.notHoverable) this.$el.addClass('editing');
+    });
+    $layer.on('blur', () => this.$el.removeClass('editing'));
+
   }
 
   handleElementEditorClick(editor) {
