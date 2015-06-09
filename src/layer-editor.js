@@ -22,7 +22,7 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
     this.$el.on('click', this.onClick.bind(this));
 
-    let $layer = this.$el.children('.leaf-layer');
+    this.$layer = this.$el.children('.leaf-layer');
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
@@ -36,23 +36,22 @@ class LayerEditor extends mixin(class Base{}, events) {
     let $editorEl = this.$el.find('.leaf-layer');
 
     // Setup text editing functionality, must come after element editor setups
-    $layer.attr('contenteditable', true);
-    $layer.find('.leafbuilder-el-container').attr('contenteditable', false)
-    $layer.on('focus', () => {
+    this.$layer.attr('contenteditable', true);
+    this.$layer.find('.leafbuilder-el-container').attr('contenteditable', false)
+    this.$layer.on('focus', () => {
       if (!this.notHoverable) this.$el.addClass('editing');
     });
-    $layer.on('blur', () => this.$el.removeClass('editing'));
-    $layer.on('keyup', this.handleEdit.bind(this));
+    this.$layer.on('blur', () => this.$el.removeClass('editing'));
+    this.$layer.on('keyup', this.handleEdit.bind(this));
 
   }
 
   handleEdit(e) {
     e.stopPropagation();
-    let $layer = this.$el.children('.leaf-layer');
 
     // There are two types of top-level elements in here. 
     // element containers and text. We need to distinguish
-    let lines = _.map($layer.children(), (topEl) => {
+    let lines = _.map(this.$layer.children(), (topEl) => {
       let $topEl = $(topEl);
       if ($topEl.hasClass('leafbuilder-el-container')) {
         let id = $topEl.children('.leaf-element').attr('data-leaf-el');
@@ -62,17 +61,17 @@ class LayerEditor extends mixin(class Base{}, events) {
       }
     });
 
-    let layerId = $layer.attr('data-leaf-node');
+    let layerId = this.$layer.attr('data-leaf-node');
     this.config.transformLayerNode(layerId, lines.join('\n'));
   }
 
-  convertTextLayerToContent($layer) {
+  convertTextLayerToContent($original) {
     // convert back to standard storage format by cloning original
     // and parsing out the id and making a string with embedded ids
     // like so: "blah <div leaf 3>...</div> blah" -> "blah <<3>> blah"
-    let $clone = $layer.clone();
+    let $clone = $original.clone();
     let $clonedChildren = $clone.find('.leafbuilder-el-container');
-    let $originalChildren = $layer.find('.leafbuilder-el-container');
+    let $originalChildren = $original.find('.leafbuilder-el-container');
     _.each($clonedChildren, function(clonedChild, i) {
       let childId = $originalChildren.eq(i)
                       .children('.leaf-element').attr('data-leaf-el');
@@ -105,6 +104,17 @@ class LayerEditor extends mixin(class Base{}, events) {
     _.each(this.editors, (e) => e.resetClasses());
   }
 
+  disableEditables() {
+    _.each(this.editors, (e) => e.clearEditOptions());
+    _.each(this.editors, (e) => e.disableEditing());
+    this.$el.find('.leaf-layer').attr('contenteditable', false);
+  }
+
+  enableEditables() {
+    _.each(this.editors, (e) => e.enableEditing());
+    this.$layer.attr('contenteditable', true);
+  }
+
   setHovered(bool = true) {
     if (this.notHoverable) return;
     this.hovered = true;
@@ -123,9 +133,7 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.emit('hoverOut', editor);
   }
 
-  deconstruct() {
-    _.each(this.editors, (e) => e.deconstruct());
-  }
+
 
 }
 

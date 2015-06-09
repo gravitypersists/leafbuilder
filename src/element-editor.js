@@ -19,7 +19,9 @@ class ElementEditor extends mixin(class Base{}, events) {
       <style> ${ styles } </style>
     `);
 
-    this.$el.on('click', (e) => this.handleClick());
+    // need to capture this click to be able to prevent clicks in
+    // the elements from doing things.
+    this.$el[0].addEventListener('click', this.handleClick.bind(this), true);
     this.$el.hover(this.onHoverIn.bind(this), this.onHoverOut.bind(this));
     this.boundHandler = this.handleBodyClick.bind(this);
   }
@@ -47,7 +49,10 @@ class ElementEditor extends mixin(class Base{}, events) {
     }
   }
 
-  handleClick() {
+  // this handler is captured, not bubbled
+  handleClick(e) {
+    // enable normal clicks when editor is not in edit mode
+    if (!this.disabled) e.stopPropagation();
     if (this.hovered) this.emit('click');
   }
 
@@ -74,6 +79,14 @@ class ElementEditor extends mixin(class Base{}, events) {
     (bool) ? this.$el.addClass('hovered') : this.$el.removeClass('hovered');
   }
 
+  disableEditing() {
+    console.log('disableEditing')
+    this.disabled = true;
+  }
+
+  enableEditing() {
+    this.disabled = false;
+  }
 }
 
 module.exports = ElementEditor;

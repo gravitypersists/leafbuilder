@@ -58,7 +58,9 @@ class LeafBuilder extends mixin(class Base{}, events) {
     });
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
-
+    tree.on('enabled', (enabledBool) => {
+      $main.toggleClass('preview-mode', !enabledBool); 
+    });
     // TODO need to scope this selector
     loadElementsIntoTree($('html /deep/ .leaf-layer'), tree);
 
@@ -71,7 +73,7 @@ class LeafBuilder extends mixin(class Base{}, events) {
     $(document.body).on('keydown', (e) => {
       if (e.which === 9) { // tab key
         e.preventDefault();
-        tree.toggleEscape();
+        tree.toggleEditMode();
       }
     });
 

@@ -1,11 +1,14 @@
 const _ = require('lodash');
 const $ = require('jquery');
+const mixin = require('./util/mixin');
+const events = require('./util/events');
 const LayerEditor = require('./layer-editor.js');
 
 // A sort of "view-model" but "view-collection" having a tree structure
-class LayerTree {
+class LayerTree extends mixin(class Base{}, events) {
 
   constructor(leaf, $el, config, toolbox, $detachments) {
+    super();
     this.$el = $el;
     this.toolbox = toolbox;
     this.config = config;
@@ -14,6 +17,8 @@ class LayerTree {
     this.data = null;
     // a stack for keeping track of editors, layer and element, hovers
     this.hoverStack = [];
+    // Self-explanatory
+    this.editMode = true;
   }
 
   // nodeString looks like "3.0.1.3"
@@ -41,22 +46,26 @@ class LayerTree {
     editor.on('hoverOut', (editor) => this.handleChildHoveredOut(editor));
   }
 
-  toggleEscape() {
-    (this.escaping) ? this.unescape() : this.escape();
+  toggleEditMode() {
+    (this.editMode) ? this.disableEditMode() : this.enableEditMode();
   }
 
-  escape() {
-    this.escaping = true;
+  disableEditMode() {
+    this.editMode = false;
     this.clearHoverClasses();
     this.$el.removeClass('editing-layer');
+    this.disableEditables();
+    this.emit('enabled', false);
   }
 
-  unescape() {
-    this.escaping = false;
+  enableEditMode() {
+    this.editMode = true;
+    this.enableEditables();
+    this.emit('enabled', true);
   }
 
   handleChildHoveredIn(editor) {
-    if (this.escaping) return;
+    if (!this.editMode) return;
     this.currentHover = editor;
     this.clearHoverClasses();
     editor.setHovered();
@@ -71,10 +80,23 @@ class LayerTree {
   }
 
   clearHoverClasses(node) {
+    this.invokeAllChildren('resetClasses');
+  }
+
+  disableEditables(node) {
+    this.invokeAllChildren('disableEditables');
+  }
+
+  enableEditables(node) {
+    this.invokeAllChildren('enableEditables');
+  }
+
+  // recursively calls a method on all children in the tree
+  invokeAllChildren(method, node) {
     node = node || this.data;
     _.each(node.children, (child) => {
-      child.editor.resetClasses();
-      this.clearHoverClasses(child);
+      child.editor[method]();
+      this.invokeAllChildren(method, child);
     });
   }
 
