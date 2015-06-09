@@ -7,8 +7,8 @@
 .leafbuilder-container.hovered:after {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
+  top: -0.2em;
+  left: -3px;
   padding: 2px;
   width: 100%;
   height: 100%;

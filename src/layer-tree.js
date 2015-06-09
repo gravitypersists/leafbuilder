@@ -12,6 +12,8 @@ class LayerTree {
     // worth noting that this.data structure is self-referential,
     // so cannot be serialized 
     this.data = null;
+    // a stack for keeping track of editors, layer and element, hovers
+    this.hoverStack = [];
   }
 
   // nodeString looks like "3.0.1.3"
@@ -35,25 +37,37 @@ class LayerTree {
       parentNode.children[_.last(split)] = node;
     }
 
-    editor.on('hoverIn', (e) => this.handleChildHoveredIn(node));
-    editor.on('hoverOut', (e) => this.handleChildHoveredOut(node));
+    editor.on('hoverIn', (editor) => this.handleChildHoveredIn(editor));
+    editor.on('hoverOut', (editor) => this.handleChildHoveredOut(editor));
   }
 
+  toggleEscape() {
+    (this.escaping) ? this.unescape() : this.escape();
+  }
 
   escape() {
+    this.escaping = true;
     this.clearHoverClasses();
     this.$el.removeClass('editing-layer');
   }
 
-  handleChildHoveredIn(node) {
-    this.currentHover = node;
-    this.clearHoverClasses();
-    if (node.editor && !node.top) node.editor.setHovered();
+  unescape() {
+    this.escaping = false;
   }
 
-  handleChildHoveredOut(node) {
+  handleChildHoveredIn(editor) {
+    if (this.escaping) return;
+    this.currentHover = editor;
     this.clearHoverClasses();
-    this.handleChildHoveredIn(node.parentNode);
+    editor.setHovered();
+    this.hoverStack.push(editor);
+  }
+
+  handleChildHoveredOut(editor) {
+    this.clearHoverClasses();
+    this.hoverStack.pop();
+    let last = _.last(this.hoverStack)
+    if (last) last.setHovered();
   }
 
   clearHoverClasses(node) {

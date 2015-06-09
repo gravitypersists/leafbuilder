@@ -69,8 +69,9 @@ class LeafBuilder extends mixin(class Base{}, events) {
     });
 
     $(document.body).on('keydown', (e) => {
-      if (e.keyCode === 27) { // esc
-        tree.escape();
+      if (e.which === 9) { // tab key
+        e.preventDefault();
+        tree.toggleEscape();
       }
     });
 

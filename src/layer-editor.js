@@ -91,11 +91,13 @@ class LayerEditor extends mixin(class Base{}, events) {
   }
 
   onHoverIn(e) {
-    this.emit('hoverIn');
+    if (this.notHoverable) return;
+    this.emit('hoverIn', this);
   }
 
   onHoverOut(e) {
-    this.emit('hoverOut');
+    if (this.notHoverable) return;
+    this.emit('hoverOut', this);
   }
 
   resetClasses() {
@@ -104,6 +106,7 @@ class LayerEditor extends mixin(class Base{}, events) {
   }
 
   setHovered(bool = true) {
+    if (this.notHoverable) return;
     this.hovered = true;
     (bool) ? this.$el.addClass('hovered') : this.$el.removeClass('hovered');
   }
@@ -112,16 +115,12 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.notHoverable = true;
   }
 
-  // A pretty naive approach for the time being, will need to use
-  // something more robust than hover events in the future
   handleChildHoveredIn(editor) {
-    this.setHovered(false);
-    editor.setHovered(true);
+    this.emit('hoverIn', editor);
   }
 
   handleChildHoveredOut(editor) {
-    if (!this.notHoverable) this.setHovered(true);
-    editor.setHovered(false);
+    this.emit('hoverOut', editor);
   }
 
   deconstruct() {
