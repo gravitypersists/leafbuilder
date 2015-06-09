@@ -80,7 +80,6 @@ class ElementEditor extends mixin(class Base{}, events) {
   }
 
   disableEditing() {
-    console.log('disableEditing')
     this.disabled = true;
   }
 

@@ -21,6 +21,14 @@ class LayerTree extends mixin(class Base{}, events) {
     this.editMode = true;
   }
 
+  loadElementsIntoTree() {
+    let elements = this.$el[0].querySelectorAll('* /deep/ .leaf-layer');
+    _.each(elements, (el, i) => {
+      var node = el.getAttribute('data-leaf-node');
+      this.addLayer(node.split(':')[0], $(el));
+    });
+  }
+
   // nodeString looks like "3.0.1.3"
   addLayer(nodeString, $childEl) {
     $childEl.wrap('<div class="leafbuilder-container"></div>');

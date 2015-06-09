@@ -61,14 +61,7 @@ class LeafBuilder extends mixin(class Base{}, events) {
     tree.on('enabled', (enabledBool) => {
       $main.toggleClass('preview-mode', !enabledBool); 
     });
-    // TODO need to scope this selector
-    loadElementsIntoTree($('html /deep/ .leaf-layer'), tree);
-
-    // toolbox knows when a portion of the tree has been rerendered.
-    // That's probably more than toolbox should know.
-    toolbox.on('elementRedraw', () => {
-      loadElementsIntoTree($('#detached /deep/ .leaf-layer'));
-    });
+    tree.loadElementsIntoTree();
 
     $(document.body).on('keydown', (e) => {
       if (e.which === 9) { // tab key

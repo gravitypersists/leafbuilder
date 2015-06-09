@@ -64,9 +64,6 @@ class Toolbox extends mixin(class Base{}, events) {
     formSmith.onChange((newConfig) => {
       this.config.transformElementConfig(this.id, newConfig);
       leafElement.rebuild(newConfig);
-      // and now that we've rerendered that element, we need to let
-      // others know so they can reinstantiate leafbuilder decorators
-      this.emit('elementRedraw', this.id);
     });
   }
 
