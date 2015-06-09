@@ -39,7 +39,7 @@ class ConfigModel extends mixin(class Base{}, events)  {
   // compositeId here looks like "0.2:2" which is layer id:element id
   transformElementConfig(compositeId, newConfig) {
     let split = compositeId.split(':');
-    let node = this.getLayerNode(nodeId);
+    let node = this.getLayerNode(split[0]);
     let elementNode = node.children[split[1]];
     elementNode.config = newConfig;
     this.save();
