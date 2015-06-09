@@ -65,8 +65,8 @@ class ConfigModel extends mixin(class Base{}, events)  {
     let node = this.getLayerNode(nodeId);
 
     // First we need to find the (non-text) elements in use.
-    let idsToKeep = content.match(/<<[0-9]+>>/g)
-                           .map((i) => i.replace(/<<|>>/g, ''))
+    let idsToKeep = (content.match(/<<[0-9]+>>/g) || [])
+                            .map((i) => i.replace(/<<|>>/g, ''))
 
     // reset the layer data for all text and no-longer-used elements
     let filtered = _.filter(node.children, (c) => {
@@ -75,7 +75,7 @@ class ConfigModel extends mixin(class Base{}, events)  {
     node.children = _.indexBy(filtered, 'elementId');
 
     // Then we need to rebuild it, mapping to retain id ordering for layout
-    let newLayout = _.map(content.split('\n'), (line) => {
+    let newLayout = _.map(content.split('\n') || [], (line) => {
       if (line.match(/^<<.+>>$/) && line.split('<<').length === 2) {
         // if the line is just a block level element
         return line.replace(/<<|>>/g, '');
