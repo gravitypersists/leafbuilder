@@ -1,5 +1,7 @@
 const $ = require('jquery');
 const _ = require('lodash');
+const mixin = require('./util/mixin');
+const events = require('./util/events');
 const Leaf = require('../submodules/leaf/src/leaf');
 const LayerTree = require('./layer-tree');
 const Toolbox = require('./toolbox');
@@ -31,9 +33,10 @@ function loadElementsIntoTree(elements, tree) {
   });
 }
 
-class LeafBuilder {
+class LeafBuilder extends mixin(class Base{}, events) {
 
   constructor(el, configuration) {
+    super();
     this.$el = $(el);
     this.$el.html(`
       <style>${ styles }</style>
@@ -50,6 +53,9 @@ class LeafBuilder {
     let options = { el: $main.children('.leaf')[0] };
     let leaf = new Leaf(configuration, options);
     let config = new ConfigModel(configuration);
+    config.on('change', (config) => {
+      this.emit('change', _.omit(config, 'manifests'));
+    });
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
     let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
 

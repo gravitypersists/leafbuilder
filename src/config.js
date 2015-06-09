@@ -1,14 +1,18 @@
 const _ = require('lodash');
+const mixin = require('./util/mixin');
+const events = require('./util/events');
 
 // This model will be the source of manipulating the 
 // leaf data model. In time it will grow to add support
 // for batching changes into undoable history items.
 
-class ConfigModel {
+class ConfigModel extends mixin(class Base{}, events)  {
 
   constructor(raw) {
+    super();
     // this.raw = JSON.parse(JSON.stringify(raw)); // clone raw obj
     this.data = raw;
+    this.debouncedSave = _.debounce(() => this.emit('change', this.data), 100);
   }
 
   getLayerNode(id) { return this.data.content[id] }
@@ -83,7 +87,6 @@ class ConfigModel {
 
     // Finally, pass along the new layout, which will call save.
     this.transformDocumentLayout(nodeId, newLayout);
-    console.log(node);
   }
 
   addLayerNode(baseNode) {
@@ -112,8 +115,7 @@ class ConfigModel {
   }
 
   save() {
-    let modified = this.data;
-    localStorage.setItem('leaf-config', JSON.stringify(this.data));
+    this.debouncedSave();
   }
 
 }
