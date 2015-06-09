@@ -42,7 +42,43 @@ class LayerEditor extends mixin(class Base{}, events) {
       if (!this.notHoverable) this.$el.addClass('editing');
     });
     $layer.on('blur', () => this.$el.removeClass('editing'));
+    $layer.on('keyup', this.handleEdit.bind(this));
 
+  }
+
+  handleEdit(e) {
+    e.stopPropagation();
+    let $layer = this.$el.children('.leaf-layer');
+
+    // There are two types of top-level elements in here. 
+    // element containers and text. We need to distinguish
+    let lines = _.map($layer.children(), (topEl) => {
+      let $topEl = $(topEl);
+      if ($topEl.hasClass('leafbuilder-el-container')) {
+        let id = $topEl.children('.leaf-element').attr('data-leaf-el');
+        return '<<' + id + '>>';
+      } else {
+        return this.convertTextLayerToContent($topEl);
+      }
+    });
+
+    let layerId = $layer.attr('data-leaf-node');
+    this.config.transformLayerNode(layerId, lines.join('\n'));
+  }
+
+  convertTextLayerToContent($layer) {
+    // convert back to standard storage format by cloning original
+    // and parsing out the id and making a string with embedded ids
+    // like so: "blah <div leaf 3>...</div> blah" -> "blah <<3>> blah"
+    let $clone = $layer.clone();
+    let $clonedChildren = $clone.find('.leafbuilder-el-container');
+    let $originalChildren = $layer.find('.leafbuilder-el-container');
+    _.each($clonedChildren, function(clonedChild, i) {
+      let childId = $originalChildren.eq(i)
+                      .children('.leaf-element').attr('data-leaf-el');
+      $(clonedChild).replaceWith('<<' + childId + '>>');
+    });
+    return _.unescape($clone.html());
   }
 
   handleElementEditorClick(editor) {

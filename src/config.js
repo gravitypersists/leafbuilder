@@ -20,14 +20,13 @@ class ConfigModel {
   }
 
   addElement(nodeId, type) {
-    let node = this.data.content[nodeId];
-    // concat to [-1] in case node.children is empty {}
-    let ids = [-1].concat(_.keys(node.children));
-    let newId = Math.max.apply(null, ids) + 1;
+    let node = this.getLayerNode(nodeId);
+    let newId = 0;
+    while (node.children[newId]) newId++;
     node.children[newId] = {
       "elementId": newId,
       "type": type,
-      "config": this.data.manifests[type].defaultConfig || {}
+      "config": _.cloneDeep(this.data.manifests[type].defaultConfig) || {}
     };
     this.save();
     return newId;
@@ -36,7 +35,7 @@ class ConfigModel {
   // compositeId here looks like "0.2:2" which is layer id:element id
   transformElementConfig(compositeId, newConfig) {
     let split = compositeId.split(':');
-    let node = this.data.content[split[0]];
+    let node = this.getLayerNode(nodeId);
     let elementNode = node.children[split[1]];
     elementNode.config = newConfig;
     this.save();
@@ -45,7 +44,7 @@ class ConfigModel {
   // convenience method for adding new element of type Text
   addTextNode(nodeId, content) {
     let newId = this.addElement(nodeId, "Text");
-    let node = this.data.content[nodeId];
+    let node = this.getLayerNode(nodeId);
     node.children[newId].config.text.content = content;
     return newId;
   }
@@ -54,11 +53,37 @@ class ConfigModel {
     this.transformElementConfig(compositeId, { "text": { "content": content }});
   }
 
-  // content is an array of elements
-  transformLayerNode(nodeId, children, layout) {
-    let node = this.data.content[nodeId];
-    node.children = _.groupBy('elementId', children);
-    node.layout = layout;
+  // I'm still thinking pretty hard about how to do this, with
+  // edit histories planned, undo, redo, etc, definitions are needed.
+  // I'm also thinking giving each element an id is overkill, but I
+  // want to get to Canvas layout before I kill it.
+  transformLayerNode(nodeId, content) {
+    let node = this.getLayerNode(nodeId);
+
+    // First we need to find the (non-text) elements in use.
+    let idsToKeep = content.match(/<<[0-9]+>>/g)
+                           .map((i) => i.replace(/<<|>>/g, ''))
+
+    // reset the layer data for all text and no-longer-used elements
+    let filtered = _.filter(node.children, (c) => {
+      return _.includes(idsToKeep, ''+c.elementId);
+    });
+    node.children = _.indexBy(filtered, 'elementId');
+
+    // Then we need to rebuild it, mapping to retain id ordering for layout
+    let newLayout = _.map(content.split('\n'), (line) => {
+      if (line.match(/^<<.+>>$/) && line.split('<<').length === 2) {
+        // if the line is just a block level element
+        return line.replace(/<<|>>/g, '');
+      } else {
+        // otherwise it's a text element and we create it now and return id
+        return this.addTextNode(nodeId, line);
+      }
+    });
+
+    // Finally, pass along the new layout, which will call save.
+    this.transformDocumentLayout(nodeId, newLayout);
+    console.log(node);
   }
 
   addLayerNode(baseNode) {
