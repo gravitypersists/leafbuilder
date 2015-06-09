@@ -34,8 +34,8 @@ class Toolbox extends mixin(class Base{}, events) {
   show($elementEl, id) {
     let rect = $elementEl[0].getBoundingClientRect();
     this.$el.css({
-      top: rect.top - this.$el.parent().offset().top,
-      left: rect.right - this.$el.parent().offset().left
+      top: rect.top - this.$el.parent().offset().top - 3,
+      left: rect.right - this.$el.parent().offset().left + 3
     });
     this.$el.show();
     this.$drawer.empty().hide();
