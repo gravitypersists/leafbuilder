@@ -67,6 +67,8 @@ class LayerTree extends mixin(class Base{}, events) {
   }
 
   enableEditMode() {
+    // the page may have changed, we need to rebuild editables
+    this.loadElementsIntoTree();
     this.editMode = true;
     this.enableEditables();
     this.emit('enabled', true);
