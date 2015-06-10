@@ -7,10 +7,11 @@ const LayerEditor = require('./layer-editor.js');
 // A sort of "view-model" but "view-collection" having a tree structure
 class LayerTree extends mixin(class Base{}, events) {
 
-  constructor(leaf, $el, config, toolbox, $detachments) {
+  constructor(leaf, $el, config, toolbox, quickPicker) {
     super();
     this.$el = $el;
     this.toolbox = toolbox;
+    this.quickPicker = quickPicker;
     this.config = config;
     // worth noting that this.data structure is self-referential,
     // so cannot be serialized 
@@ -33,7 +34,7 @@ class LayerTree extends mixin(class Base{}, events) {
   addLayer(nodeString, $childEl) {
     $childEl.wrap('<div class="leafbuilder-container"></div>');
     let $el = $childEl.parent();
-    let editor = new LayerEditor($el, this.config, this.toolbox);
+    let editor = new LayerEditor($el, this.config, this.toolbox, this.quickPicker);
 
     let node = null;
     let split = nodeString.split('.');

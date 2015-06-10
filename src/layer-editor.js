@@ -5,14 +5,14 @@ const styles = fs.readFileSync(__dirname + '/../styles/layer-editor.css', 'utf8'
 const mixin = require('./util/mixin');
 const events = require('./util/events');
 const ElementEditor = require('./element-editor');
-const MediumEditor = require('../node_modules/medium-editor/dist/js/medium-editor.js');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
-  constructor($el, config, toolbox) {
+  constructor($el, config, toolbox, quickPicker) {
     super();
     this.$el = $el;
     this.config = config;
+    this.quickPicker = quickPicker;
     this.$el.append(`
       <style> ${ styles } </style>
       <ul class='layer-menu'>
@@ -49,6 +49,12 @@ class LayerEditor extends mixin(class Base{}, events) {
   handleEdit(e) {
     e.stopPropagation();
 
+    // show quick picker on "<" input
+    if (e.which === 188) { // '<' key
+      this.quickPicker.show(this.$layer);
+      return; // avoid edits
+    }
+
     // There are two types of top-level elements in here. 
     // element containers and text. We need to distinguish
     let lines = _.map(this.$layer.children(), (topEl) => {
@@ -63,6 +69,7 @@ class LayerEditor extends mixin(class Base{}, events) {
 
     let layerId = this.$layer.attr('data-leaf-node');
     this.config.transformLayerNode(layerId, lines.join('\n'));
+
   }
 
   convertTextLayerToContent($original) {

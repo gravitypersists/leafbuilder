@@ -54,7 +54,8 @@ class ConfigModel extends mixin(class Base{}, events)  {
   }
 
   transformTextNode(compositeId, content) {
-    this.transformElementConfig(compositeId, { "text": { "content": content }});
+    let config = { "text": { "content": content }};
+    this.transformElementConfig(compositeId, config);
   }
 
   // I'm still thinking pretty hard about how to do this, with

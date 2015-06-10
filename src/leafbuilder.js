@@ -5,6 +5,7 @@ const events = require('./util/events');
 const Leaf = require('../submodules/leaf/src/leaf');
 const LayerTree = require('./layer-tree');
 const Toolbox = require('./toolbox');
+const QuickPicker = require('./quick-picker');
 const ConfigModel = require('./config');
 const fs = require('fs');
 // TODO: look into using webpack, or finding a proper way to package
@@ -43,6 +44,7 @@ class LeafBuilder extends mixin(class Base{}, events) {
       <div class="leafbuilder-main-container">
         <div class="leaf"></div>
         <div class="toolbox"></div>
+        <div class="quick-picker"></div>
         <div class="detached-container"></div>
       </div>
     `);
@@ -57,7 +59,8 @@ class LeafBuilder extends mixin(class Base{}, events) {
       this.emit('change', _.omit(config, 'manifests'));
     });
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
-    let tree = new LayerTree(leaf, $main, config, toolbox, $main.children('.detached-container'));
+    let quickPicker = new QuickPicker($main.children('.quick-picker'), manifests);
+    let tree = new LayerTree(leaf, $main, config, toolbox, quickPicker);
     tree.on('enabled', (enabledBool) => {
       $main.toggleClass('preview-mode', !enabledBool); 
     });

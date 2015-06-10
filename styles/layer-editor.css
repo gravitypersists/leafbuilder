@@ -83,3 +83,8 @@
   min-width: 50px;
   min-height: 20px;
 }
+
+.picker-anchor {
+  background-color: #C1D9F0;
+  outline: none;
+}
