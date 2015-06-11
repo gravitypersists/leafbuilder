@@ -109,6 +109,7 @@ class LayerEditor extends mixin(class Base{}, events) {
       // finally, reset element editors
       let newEls = $text.find('.leaf-element').not('.leaf-text-el');
       _.each(newEls, (el) => this.addElementEditor(el));
+      _.find(this.editors, (e) => e.id === newId).showEditOptions();
     });
   }
 

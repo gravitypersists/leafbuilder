@@ -9,6 +9,7 @@ class ElementEditor extends mixin(class Base{}, events) {
   constructor($original, toolbox) {
     super();
     this.toolbox = toolbox;
+    this.id = $original.attr('data-leaf-el');
 
     this.$original = $original;
     $original.wrap('<div class="leafbuilder-el-container"></div>');
