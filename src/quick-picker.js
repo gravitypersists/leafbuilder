@@ -55,6 +55,7 @@ class QuickPicker extends mixin(class Base{}, events) {
 
     this.$container.append(this.$el);
     $anchor.on('keyup', this.onKeyup.bind(this));
+    $anchor.on('keydown', this.onKeydown.bind(this));
     $anchor.on('blur', this.close.bind(this));
 
     focusOnEnd($anchor[0]);
@@ -62,13 +63,6 @@ class QuickPicker extends mixin(class Base{}, events) {
 
   onKeyup(e) {
     e.stopPropagation();
-
-    if (e.which === 13) { // enter
-      e.preventDefault();
-      let $first = $matches.children().first();
-      if ($first.length) this.becomeElement($first.text());
-      return;
-    }
 
     let search = $(e.currentTarget).text().replace(/<|>/g, '');
     let options = _.filter(_.keys(manifests), (title) => {
@@ -88,6 +82,16 @@ class QuickPicker extends mixin(class Base{}, events) {
       });
     });
 
+  }
+
+  onKeydown(e) {
+    if (e.which === 13) { // enter
+      e.preventDefault();
+      let $matches = this.$el.parent().find('.picker-matches');
+      let $first = $matches.children().first();
+      if ($first.length) this.becomeElement($first.text());
+      return;
+    }
   }
 
   becomeElement(elementType) {
