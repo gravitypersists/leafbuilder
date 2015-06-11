@@ -82,7 +82,10 @@ class QuickPicker extends mixin(class Base{}, events) {
       let fancyOption = option.replace(search, `<strong>${ search }</strong>`)
       let $li = $(`<li>${ fancyOption }</li>`);
       $matches.append($li);
-      $li.on('click', (e) => this.becomeElement(option));
+      $li.on('mousedown', (e) => {
+        e.preventDefault();
+        this.becomeElement(option);
+      });
     });
 
   }
@@ -95,6 +98,7 @@ class QuickPicker extends mixin(class Base{}, events) {
   }
 
   close() {
+    this.$container.remove();
   }
 
 }
