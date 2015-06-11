@@ -26,7 +26,6 @@ function getRangeFromLastCharsAfter(delimiter) {
   let startAt = split.join('<').length;
   let clone2 = range.cloneRange();
   clone2.setStart(range.endContainer, startAt);
-  let rect = clone2.getBoundingClientRect();
   selection.removeAllRanges();
   selection.addRange(clone2);
   return clone2;

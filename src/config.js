@@ -11,7 +11,6 @@ class ConfigModel extends mixin(class Base{}, events)  {
 
   constructor(raw) {
     super();
-    // this.raw = JSON.parse(JSON.stringify(raw)); // clone raw obj
     this.data = raw;
     this.debouncedSave = _.debounce(() => this.emit('change', this.data), 100);
   }
