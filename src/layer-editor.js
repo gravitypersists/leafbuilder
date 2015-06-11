@@ -13,6 +13,7 @@ class LayerEditor extends mixin(class Base{}, events) {
     super();
     this.$el = $el;
     this.config = config;
+    this.toolbox = toolbox;
     this.leaf = leaf;
     this.$el.append(`
       <style> ${ styles } </style>
@@ -28,13 +29,7 @@ class LayerEditor extends mixin(class Base{}, events) {
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
-    _.each(innerEls, (el, i) => {
-      let elEditor = new ElementEditor($(el), toolbox);
-      this.editors.push(elEditor);
-      elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
-      elEditor.on('hoverIn', (e) => this.handleChildHoveredIn(elEditor));
-      elEditor.on('hoverOut', (e) => this.handleChildHoveredOut(elEditor));
-    });
+    _.each(innerEls, (el) => this.addElementEditor(el));
     let $editorEl = this.$el.find('.leaf-layer');
 
     // Setup text editing functionality, must come after element editor setups
@@ -46,6 +41,14 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.$layer.on('blur', () => this.$el.removeClass('editing'));
     this.$layer.on('keyup', this.handleEdit.bind(this));
 
+  }
+
+  addElementEditor(el) {
+    let elEditor = new ElementEditor($(el), this.toolbox);
+    this.editors.push(elEditor);
+    elEditor.on('click', (e) => this.handleElementEditorClick(elEditor));
+    elEditor.on('hoverIn', (e) => this.handleChildHoveredIn(elEditor));
+    elEditor.on('hoverOut', (e) => this.handleChildHoveredOut(elEditor));
   }
 
   handleEdit(e) {
@@ -103,6 +106,9 @@ class LayerEditor extends mixin(class Base{}, events) {
       let newElConfig = this.config.transformTextNode(compositeId, transformed);
       // and rerender the text element
       this.leaf.getElementById(compositeId).rebuild(newElConfig);
+      // finally, reset element editors
+      let newEls = $text.find('.leaf-element').not('.leaf-text-el');
+      _.each(newEls, (el) => this.addElementEditor(el));
     });
   }
 
