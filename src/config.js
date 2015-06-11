@@ -44,6 +44,7 @@ class ConfigModel extends mixin(class Base{}, events)  {
     let elementNode = node.children[split[1]];
     elementNode.config = newConfig;
     this.save();
+    return newConfig;
   }
 
   // convenience method for adding new element of type Text
@@ -56,7 +57,7 @@ class ConfigModel extends mixin(class Base{}, events)  {
 
   transformTextNode(compositeId, content) {
     let config = { "text": { "content": content }};
-    this.transformElementConfig(compositeId, config);
+    return this.transformElementConfig(compositeId, config);
   }
 
   // I'm still thinking pretty hard about how to do this, with
