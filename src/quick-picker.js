@@ -2,6 +2,7 @@ const $ = require('jquery');
 const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
+const manifests = require('./manifests');
 const fs = require('fs');
 const styles = fs.readFileSync(__dirname + '/../styles/quick-picker.css', 'utf8')
 
@@ -74,7 +75,7 @@ class QuickPicker extends mixin(class Base{}, events) {
     }
 
     let search = $(e.currentTarget).text().replace(/<|>/g, '');
-    let options = _.filter(_.keys(this.manifests), (title) => {
+    let options = _.filter(_.keys(manifests), (title) => {
       let regex = new RegExp('^' + search, 'i');
       return title.match(regex);
     });

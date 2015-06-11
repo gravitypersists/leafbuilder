@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const mixin = require('./util/mixin');
 const events = require('./util/events');
+const manifests = require('./manifests');
 
 // This model will be the source of manipulating the 
 // leaf data model. In time it will grow to add support
@@ -30,7 +31,7 @@ class ConfigModel extends mixin(class Base{}, events)  {
     node.children[newId] = {
       "elementId": newId,
       "type": type,
-      "config": _.cloneDeep(this.data.manifests[type].defaultConfig) || {}
+      "config": _.cloneDeep(manifests[type].defaultConfig) || {}
     };
     this.save();
     return newId;

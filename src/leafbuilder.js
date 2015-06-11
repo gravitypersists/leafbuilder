@@ -8,6 +8,7 @@ const Toolbox = require('./toolbox');
 const QuickPicker = require('./quick-picker');
 const ConfigModel = require('./config');
 const fs = require('fs');
+const manifests = require('./manifests');
 // TODO: look into using webpack, or finding a proper way to package
 // css in with applications
 const baseStyles = fs.readFileSync(__dirname + '/../styles/leafbuilder.css', 'utf8')
@@ -16,16 +17,7 @@ const fsExtras = fs.readFileSync(__dirname + '/../styles/formsmith-custom.css', 
 
 let styles = baseStyles + fsStyles + fsExtras;
 
-let manifests = {
-  Text: require('../submodules/leaf/src/elements/text/manifest.json'),
-  Katex: require('../submodules/leaf/src/elements/katex/manifest.json'),
-  Picker: require('../submodules/leaf/src/elements/picker/manifest.json'),
-  Image: require('../submodules/leaf/src/elements/image/manifest.json'),
-  Switch: require('../submodules/leaf/src/elements/switch/manifest.json'),
-  EventButton: require('../submodules/leaf/src/elements/event-button/manifest.json'),
-  LogicalStatement: require('../submodules/leaf/src/elements/logical-statement/manifest.json'),
-  Question: require('../submodules/leaf/src/elements/question/manifest.json'),
-}
+
 
 function loadElementsIntoTree(elements, tree) {
   _.each(elements, (el, i) => {
@@ -45,7 +37,6 @@ class LeafBuilder extends mixin(class Base{}, events) {
         <div class="leaf"></div>
         <div class="toolbox"></div>
         <div class="quick-picker"></div>
-        <div class="detached-container"></div>
       </div>
     `);
     let $main = this.$el.find('.leafbuilder-main-container');
