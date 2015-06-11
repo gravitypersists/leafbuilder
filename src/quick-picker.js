@@ -34,37 +34,33 @@ function getRangeFromLastCharsAfter(delimiter) {
 
 class QuickPicker extends mixin(class Base{}, events) {
 
-  constructor($el, manifests) {
+  constructor() {
     super();
-    this.manifests = manifests;
-    this.$el = $el;
-    this.$el.html(`
+    this.$el = $(`
       <style> ${ styles } </style>
-      <ul class='picker-matches'></ul>
+      <div class='quick-picker'>
+        <ul class='picker-matches'></ul>
+      </div>
     `);
-    this.$el.hide();
-  }
 
-  show() {
     // we need to wrap this with a non contenteditable so that we
     // can place event handlers on 
-    let $container = $('<span contenteditable="false" style="position: relative;">');
+    this.$container = $('<span contenteditable="false" style="position: relative;">');
 
     let range = getRangeFromLastCharsAfter('<');
     let $anchor = $('<span class="picker-anchor" contenteditable="true">');
     // this is kinda ugly. But I want to wrap a range in place...
     range.surroundContents($anchor[0]);
-    range.surroundContents($container[0]);
+    range.surroundContents(this.$container[0]);
 
-    $container.append(this.$el);
-    $anchor.on('keyup', this.handleKeyup.bind(this));
+    this.$container.append(this.$el);
+    $anchor.on('keyup', this.onKeyup.bind(this));
+    $anchor.on('blur', this.close.bind(this));
 
     focusOnEnd($anchor[0]);
-
-    this.$el.show();
   }
 
-  handleKeyup(e) {
+  onKeyup(e) {
     e.stopPropagation();
 
     if (e.which === 13) { // enter
@@ -91,10 +87,15 @@ class QuickPicker extends mixin(class Base{}, events) {
 
   }
 
-  becomeElement(elementName) {
+  becomeElement(elementType) {
+    let id = this.$container.parents('.leaf-text-el').attr('data-leaf-el');
+    this.$container.replaceWith(_.escape('<<' + elementType + '>>'));
+    this.emit('pick', id, elementType);
+    this.close();
+  }
 
-  } 
-
+  close() {
+  }
 
 }
 

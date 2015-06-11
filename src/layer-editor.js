@@ -5,14 +5,15 @@ const styles = fs.readFileSync(__dirname + '/../styles/layer-editor.css', 'utf8'
 const mixin = require('./util/mixin');
 const events = require('./util/events');
 const ElementEditor = require('./element-editor');
+const QuickPicker = require('./quick-picker');
 
 class LayerEditor extends mixin(class Base{}, events) {
 
-  constructor($el, config, toolbox, quickPicker) {
+  constructor($el, config, toolbox, leaf) {
     super();
     this.$el = $el;
     this.config = config;
-    this.quickPicker = quickPicker;
+    this.leaf = leaf;
     this.$el.append(`
       <style> ${ styles } </style>
       <ul class='layer-menu'>
@@ -23,6 +24,7 @@ class LayerEditor extends mixin(class Base{}, events) {
     this.$el.on('click', this.onClick.bind(this));
 
     this.$layer = this.$el.children('.leaf-layer');
+    this.layerId = this.$layer.attr('data-leaf-node');
 
     this.editors = [];
     let innerEls = this.$el.find('.leaf-element').not('.leaf-text-el');
@@ -51,7 +53,7 @@ class LayerEditor extends mixin(class Base{}, events) {
 
     // show quick picker on "<" input
     if (e.which === 188) { // '<' key
-      this.quickPicker.show(this.$layer);
+      this.setupQuickPicker();
       return; // avoid edits
     }
 
@@ -85,6 +87,23 @@ class LayerEditor extends mixin(class Base{}, events) {
       $(clonedChild).replaceWith('<<' + childId + '>>');
     });
     return _.unescape($clone.html());
+  }
+
+  setupQuickPicker() {
+    let picker = new QuickPicker();
+    // the picker injects something like "<<Katex>>", we need to handle that
+    picker.on('pick', (containerTextElId, type) => {
+      // We need to place the element into config
+      let newId = this.config.addElement(this.layerId, type);
+      // update the text element's config
+      let $text = this.$layer.find(`[data-leaf-el='${ containerTextElId }']`);
+      let content = this.convertTextLayerToContent($text);
+      let transformed = content.replace(`<<${type}>>`, `<<${newId}>>`);
+      let compositeId = this.layerId + ':' + containerTextElId;
+      let newElConfig = this.config.transformTextNode(compositeId, transformed);
+      // and rerender the text element
+      this.leaf.getElementById(compositeId).rebuild(newElConfig);
+    });
   }
 
   handleElementEditorClick(editor) {

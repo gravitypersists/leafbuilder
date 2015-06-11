@@ -5,7 +5,6 @@ const events = require('./util/events');
 const Leaf = require('../submodules/leaf/src/leaf');
 const LayerTree = require('./layer-tree');
 const Toolbox = require('./toolbox');
-const QuickPicker = require('./quick-picker');
 const ConfigModel = require('./config');
 const fs = require('fs');
 const manifests = require('./manifests');
@@ -50,8 +49,7 @@ class LeafBuilder extends mixin(class Base{}, events) {
       this.emit('change', _.omit(config, 'manifests'));
     });
     let toolbox = new Toolbox($main.children('.toolbox'), leaf, manifests, config);
-    let quickPicker = new QuickPicker($main.children('.quick-picker'), manifests);
-    let tree = new LayerTree(leaf, $main, config, toolbox, quickPicker);
+    let tree = new LayerTree(leaf, $main, config, toolbox);
     tree.on('enabled', (enabledBool) => {
       $main.toggleClass('preview-mode', !enabledBool); 
     });
