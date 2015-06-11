@@ -29,12 +29,12 @@ class ConfigModel extends mixin(class Base{}, events)  {
     let newId = 0;
     while (node.children[newId]) newId++;
     node.children[newId] = {
-      "elementId": newId,
-      "type": type,
-      "config": _.cloneDeep(manifests[type].defaultConfig) || {}
+      'elementId': newId,
+      'type': type,
+      'config': _.cloneDeep(manifests[type].defaultConfig) || {}
     };
     this.save();
-    return newId;
+    return '' + newId;
   }
 
   // compositeId here looks like "0.2:2" which is layer id:element id
