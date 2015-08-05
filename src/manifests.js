@@ -7,4 +7,5 @@ module.exports = {
   EventButton: require('../submodules/leaf/src/elements/event-button/manifest.json'),
   LogicalStatement: require('../submodules/leaf/src/elements/logical-statement/manifest.json'),
   Question: require('../submodules/leaf/src/elements/question/manifest.json'),
+  JSTest: require('../submodules/leaf/src/elements/js-test/manifest.json'),
 }
